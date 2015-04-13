@@ -1,6 +1,9 @@
-# INFO-H303 - Base de donnees
-Projet du cours INFO-F303 - Base de données à l'Université Libre de Bruxelles (ULB) de l'année 2014-2015.
-
+# Rapports
+Pour la deuxième partie, vous rendrez un rapport contenant :
+- les documents de la première partie tenant compte des remarques des assistants ;
+- le script SQL DLL de création de la base de données ;
+- les requetes demandées ;
+- les explications et justifications de vos choix et hypothèses.
 
 # Informations pratiques
 - Le projet se fera obligatoirement par groupe de deux.

@@ -1,6 +1,10 @@
-# INFO-H303 - Base de donnees
-Projet du cours INFO-F303 - Base de données à l'Université Libre de Bruxelles (ULB) de l'année 2014-2015.
+# Rapports
+Pour la première partie, on vous demande les documents suivants :
+- un diagramme entité-association modélisant le projet ainsi que ses contraintes ;
+- une traduction relationnelle de ce diagramme et ses contraintes ;
+- vos hypothèses et la justification de vos choix de modélisation.
 
+Le formalisme utilisé doit etre un de ceux vus au cours ou aux TPs.
 
 # Informations pratiques
 - Le projet se fera obligatoirement par groupe de deux.
