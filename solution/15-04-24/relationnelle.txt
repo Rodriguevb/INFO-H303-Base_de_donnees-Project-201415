@@ -1,0 +1,16 @@
+Utilisateur(_ID_,motDePasse,dateExpiration,carteBancaire)
+
+Abonne(_ID_,_RFID_,prenom,nom,telephone,dateInscription,adresseVille,adresseCodePostal,adresseRue,adresseNumero)
+	*Abonne.ID référence Utilisateur.ID
+
+Station(_numero_,nom,bornePaiement,capacite,coordonneeGps)
+
+
+Velo(_numero_,dateMiseEnService,modele,fonctionne,/station/)
+	*Velo.station référence Station.numero
+
+Deplacement(_utilisateur,tempsDepart_,depart,velo,/tempsArrivee/,/arrivee/)
+	*Deplacement.utilisateur référence Utilisateur.ID
+	*Deplacement.depart référence Station.numero
+	*Deplacement.velo référence Velo.numero
+	*Deplacement.arrivee référence Station.numero
