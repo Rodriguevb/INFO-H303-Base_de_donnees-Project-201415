@@ -3,9 +3,14 @@
 - Si l’utilisateur relié à un déplacement est un abonné, la date de départ doit être postérieur à sa date d’inscription.
 - Les temps de départ et d’arrivée d’un déplacement doivent être antérieure à sa date d’expiration.
 - La date d’inscription d’un abonné doit être antérieur à sa date d’expiration.
-- Si un déplacement à un temps d’arrivée, il a une station d’arrivée et inversément.
+- Si un déplacement à un temps d’arrivée, il a une station d’arrivée et inversement.
 - Un utilisateur ne peut être lié au maximum qu’à un seul déplacement sans date et station d’arrivée.
 - Un vélo ne peut être lié au maximum qu’à un seul déplacement sans date et station d’arrivée.
 - Si un vélo est lié à un déplacement sans date et station d’arrivée, il n’est placé dans aucune station.
 -Si un vélo n’est lié à aucun déplacement sans date et station d’arrivée, il est placé dans la station d’arrivée de son dernier déplacement.
 - Le nombre de vélo placé dans une station est inférieur ou égal à la capacité de celle-ci.
+
+
+Remarques:
+
+Le type de généralisation n’est pas précisé car dans le cas d’une seule sous-entité, la généralisation est toujours partielle. La notion d’exclusivité ou de chevauchement n’a pas de sens dans ce cas.
