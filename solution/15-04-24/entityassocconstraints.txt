@@ -1,0 +1,11 @@
+- Si un déplacement possède un temps d’arrivée, celui-ci doit être postérieur au temps de départ.
+- Le temps de départ d’un déplacement doit être postérieur à la date de mise en service du vélo utilisé.
+- Si l’utilisateur relié à un déplacement est un abonné, la date de départ doit être postérieur à sa date d’inscription.
+- Les temps de départ et d’arrivée d’un déplacement doivent être antérieure à sa date d’expiration.
+- La date d’inscription d’un abonné doit être antérieur à sa date d’expiration.
+- Si un déplacement à un temps d’arrivée, il a une station d’arrivée.
+- Un utilisateur ne peut être lié au maximum qu’à un seul déplacement sans date et station d’arrivée.
+- Un vélo ne peut être lié au maximum qu’à un seul déplacement sans date et station d’arrivée.
+- Si un vélo est lié à un déplacement sans date et station d’arrivée, il n’est placé dans aucune station.
+-Si un vélo n’est lié à aucun déplacement sans date et station d’arrivée, il est placé dans la station d’arrivée de son dernier déplacement.
+- Le nombre de vélo placé dans une station est inférieur ou égal à la capacité de celle-ci.
