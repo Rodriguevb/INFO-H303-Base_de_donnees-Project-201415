@@ -27,7 +27,7 @@
 		
 		\item La date d’inscription d’un abonné doit être antérieur à sa date d’expiration.
 		
-		\item Si un déplacement à un temps d’arrivée, il a une station d’arrivée et inversement.
+		\item Si un déplacement a un temps d’arrivée, il a une station d’arrivée et inversement.
 		
 		\item Un utilisateur ne peut être lié au maximum qu’à un seul déplacement sans date et 				station d’arrivée.
 		
@@ -75,7 +75,16 @@
 		
 	\end{itemize}
 
-\section*{Justification}
-	Insérer texte de justification
+\section*{Justification} % Justification
+
+On a commencé par créer une table utilisateur pour stocker les données liées à ceux-ci.
+
+Ensuite  on a hérité les abonnés des utilisateurs. On ajoute pas un héritage pour les utilisateurs temporaires, car toutes les données dont on a besoin pour ceux-ci sont déjà contenue dans la table Utilisateur.
+
+On a aussi besoin d'une table station afin d'enregistrer les données les concernant.
+
+On a ensuite ajouté la table vélo. Les vélos peuvent être lié à une station. Cela permet de savoir lequel est libre et lequel on peut donner à un utilisateur.
+
+Pour terminer on ajoute une table déplacement pour permettre de sauvegarder l'historique de tous les déplacements effectués. Celle ci est liée à la table station pour connaitre l'endroit du départ et celui de l'arrivée. Elle est aussi lié à la table vélo pour savoir lequel est utilisé  et elle est aussi lié à la table utilisateur afin de savoir qui l'a effectué.
 
 \end{document}
