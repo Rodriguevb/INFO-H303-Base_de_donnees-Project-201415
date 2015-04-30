@@ -19,9 +19,9 @@ class WindowVillo(Frame):
     def __makeHomepage(self):
         """ Dessine la page d'accueil """
         self.__destroyPage()
-        
         self.page = "homepage"
 
+        # On crée les widgets
         self.hptitle = Label(self, text= " Villo Manager : ")
         self.consultButton = Button(self,
                                text="Consulter les stations et les Villos",
@@ -36,6 +36,7 @@ class WindowVillo(Frame):
                                width=50,
                                 command=self.__makeConnectpage)
 
+        # On place les widgets
         self.hptitle.place(x=350,y=200)
         self.consultButton.place(x=210,y=250)
         self.registerButton.place(x=210,y=300)
@@ -56,6 +57,8 @@ class WindowVillo(Frame):
             self.__destroyManagepage()
         elif ( self.page == "villo"):
             self.__destroyVillopage()
+        elif ( self.page == "history"):
+            self.__destroyHistorypage()
         self.page = ""
 
     def __destroyHomepage(self):
@@ -70,6 +73,7 @@ class WindowVillo(Frame):
         self.__destroyPage()
         self.page = "consult"
 
+        # On crée les widgets
         self.listStation = Listbox(self,
                                    width=35,
                                    height=30)
@@ -79,20 +83,23 @@ class WindowVillo(Frame):
                                    height=30)
         
         self.buttonVillo = Button(self,
-                             text="Voir les villos")
+                             text="Voir les villos",
+                             command=self.__loadVilloConsult)
 
         self.buttonBack = Button(self,
                                  text="Retour")
 
+        # On change l'action du bouton de retour selon si on est connecté ou non.
         if self.connected:
             self.buttonBack.config(command=self.__makeManagepage)
         else:
             self.buttonBack.config(command=self.__makeHomepage)
 
+        # On rempli la liste de station
         # TODO: Afficher les vrai stations / Villo
         self.listStation.insert(END,"test")
-        self.listVillo.insert(END,"test")
         
+        # On place les widgets
         self.listStation.place(x=50,y=20)
         self.listVillo.place(x=500, y=20)
         self.buttonVillo.place(x=350, y=250)
@@ -147,7 +154,8 @@ class WindowVillo(Frame):
 
         self.registryButton = Button(self,
                                      text="S'enregistrer",
-                                     width=40)
+                                     width=40,
+                                     command=self.__register)
 
 
         self.buttonBack = Button(self,
@@ -237,6 +245,7 @@ class WindowVillo(Frame):
         self.__destroyPage()
         self.page = "connect"
         
+        # Création widgets
         self.idEntry = Entry(self)
         self.idLabel = Label(self, text="ID :")
 
@@ -252,6 +261,8 @@ class WindowVillo(Frame):
                                  text="Retour",
                                  command=self.__makeHomepage)
 
+
+        # Placement widgets
         self.idEntry.place(x=420,y=200)
         self.idLabel.place(x=280,y=200)
 
@@ -276,6 +287,7 @@ class WindowVillo(Frame):
         self.__destroyPage()
         self.page="manage"
 
+        # Création widgets
         self.villoButton = Button(self,
                                  width=50,
                                  text="Prendre/Déposer Villo",
@@ -319,6 +331,7 @@ class WindowVillo(Frame):
         self.__destroyPage()
         self.page = "villo"
 
+        # Création widgets
         self.listStation = Listbox(self,
                                    width=35,
                                    height=30)
@@ -327,16 +340,19 @@ class WindowVillo(Frame):
 
         self.takeButton = Button(self,
                                 width=30,
-                                text="Prendre un villo")
+                                text="Prendre un villo",
+                                command=self.__takeVillo)
 
         self.putButton = Button(self,
                                 width=30,
-                                text="Déposer un villo")
+                                text="Déposer un villo",
+                                command=self.__putVillo)
 
         self.backButton = Button(self,
                                         text="Retour",
                                         command=self.__makeManagepage)
 
+        # Placements widgets
         self.listStation.place(x=50,y=20)
         self.takeButton.place(x=400,y=275)
         self.putButton.place(x=400,y=325)
@@ -354,6 +370,7 @@ class WindowVillo(Frame):
         self.__destroyPage()
         self.page = "history"
 
+        # Construction widgets
         self.historyList = Listbox(self,
                                     width=80,
                                     height=30)
@@ -365,9 +382,11 @@ class WindowVillo(Frame):
         self.scrollbar = Scrollbar(self,orient=VERTICAL)
         self.scrollbar.config(command=self.historyList.yview)
 
+        # On rempli la liste des déplacements
         # TODO: Récupérer historique
         self.historyList.insert(END, "Départ: JJ/MM/AA hh:mm:ss - Station / Arrivée: JJ/MM/AA hh:mm:ss - Station")
 
+        # Placement widgets
         self.historyList.place(x=50,y=20)
         self.scrollbar.place(x=700,y=20,relheight=0.85)
         self.backButton.place(x=50,y=550)
@@ -377,6 +396,16 @@ class WindowVillo(Frame):
         self.historyList.destroy()
         self.scrollbar.destroy()
         self.backButton.destroy()
+
+    def __loadVilloConsult(self):
+        """ Charge une liste de villo pour la consultation """
+        # TODO: Charger la liste
+        return
+
+    def __register(self):
+        """ Gère l'enregistrement d'un utilisateur """
+        # TODO: Gérer l'enregistrement
+        return
 
     def __connect(self):
         """ Gère la connexion à un compte """
@@ -388,3 +417,11 @@ class WindowVillo(Frame):
         """ Gère la déconnexion """
         self.connected = False
         self.__makeHomepage()
+
+    def __takeVillo(self):
+        """ Gère l'action de prendre un villo """
+        return
+
+    def __putVillo(self):
+        """  gère l'action de remettre un villo """
+        return
