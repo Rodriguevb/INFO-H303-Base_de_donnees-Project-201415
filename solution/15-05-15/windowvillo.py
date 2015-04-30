@@ -32,7 +32,8 @@ class WindowVillo(Frame):
                                 command=self.__makeRegistrypage)
         self.connectButton = Button(self,
                                text="Se connecter",
-                               width=50)
+                               width=50,
+                                command=self.__makeConnectpage)
 
         self.hptitle.place(x=350,y=200)
         self.consultButton.place(x=210,y=250)
@@ -48,6 +49,8 @@ class WindowVillo(Frame):
             self.__destroyConsultpage()
         elif ( self.page == "registry" ):
             self.__destroyRegistrypage()
+        elif ( self.page == "connect" ):
+            self.__destroyConnectpage()
         self.page = ""
 
     def __destroyHomepage(self):
@@ -99,6 +102,7 @@ class WindowVillo(Frame):
         self.page = "registry"
 
         # Création widgets
+        
         self.idEntry = Entry(self)
         self.idLabel = Label(self, text="ID :")
 
@@ -216,4 +220,43 @@ class WindowVillo(Frame):
 
         self.registryButton.destroy()
 
+        self.buttonBack.destroy()
+
+
+    def __makeConnectpage(self):
+        """ Dessine la page de connexion """
+        self.__destroyPage()
+        self.page = "connect"
+        
+        self.idEntry = Entry(self)
+        self.idLabel = Label(self, text="ID :")
+
+        self.passEntry = Entry(self,show="*")
+        self.passLabel = Label(self, text="Mot de passe :")
+
+        self.connectButton = Button(self,
+                                     text="Se connecter",
+                                     width=40)
+
+        self.buttonBack = Button(self,
+                                 text="Retour",
+                                 command=self.__makeHomepage)
+
+        self.idEntry.place(x=420,y=200)
+        self.idLabel.place(x=280,y=200)
+
+        self.passEntry.place(x=420,y=230)
+        self.passLabel.place(x=280,y=230)
+
+        self.connectButton.place(x=280,y=300)
+
+        self.buttonBack.place(x=50,y=550)
+
+    def __destroyConnectpage(self):
+        """ Détruit la page de connexion """
+        self.idEntry.destroy()
+        self.idLabel.destroy()
+        self.passEntry.destroy()
+        self.passLabel.destroy()
+        self.connectButton.destroy()
         self.buttonBack.destroy()
