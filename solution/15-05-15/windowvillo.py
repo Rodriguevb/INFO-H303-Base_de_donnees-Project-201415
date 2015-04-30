@@ -8,6 +8,7 @@ class WindowVillo(Frame):
         """ Constructeur """
         Frame.__init__(self,master, height=600, width=800)
         self.page = ""
+        self.connected = False
         self.__makeHomepage()
         
     def __packFrame(self):
@@ -51,6 +52,10 @@ class WindowVillo(Frame):
             self.__destroyRegistrypage()
         elif ( self.page == "connect" ):
             self.__destroyConnectpage()
+        elif ( self.page == "manage"):
+            self.__destroyManagepage()
+        elif ( self.page == "villo"):
+            self.__destroyVillopage()
         self.page = ""
 
     def __destroyHomepage(self):
@@ -77,11 +82,15 @@ class WindowVillo(Frame):
                              text="Voir les villos")
 
         self.buttonBack = Button(self,
-                                 text="Retour",
-                                 command=self.__makeHomepage)
+                                 text="Retour")
 
+        if self.connected:
+            self.buttonBack.config(command=self.__makeManagepage)
+        else:
+            self.buttonBack.config(command=self.__makeHomepage)
+
+        # TODO: Afficher les vrai stations / Villo
         self.listStation.insert(END,"test")
-
         self.listVillo.insert(END,"test")
         
         self.listStation.place(x=50,y=20)
@@ -236,7 +245,8 @@ class WindowVillo(Frame):
 
         self.connectButton = Button(self,
                                      text="Se connecter",
-                                     width=40)
+                                     width=40,
+                                    command=self.__connect)
 
         self.buttonBack = Button(self,
                                  text="Retour",
@@ -260,3 +270,121 @@ class WindowVillo(Frame):
         self.passLabel.destroy()
         self.connectButton.destroy()
         self.buttonBack.destroy()
+
+    def __makeManagepage(self):
+        """ Dessine la page de gestion """
+        self.__destroyPage()
+        self.page="manage"
+
+        self.villoButton = Button(self,
+                                 width=50,
+                                 text="Prendre/Déposer Villo",
+                                 command=self.__makeVillopage)
+
+        self.consultButton = Button(self,
+                                    width= 50,
+                                    text="Consulter les stations et villo",
+                                    command=self.__makeConsultpage)
+
+        self.historyButton = Button(self,
+                                    width=50,
+                                    text="Consulter l'historique de mes déplacements",
+                                    command=self.__makeHistorypage)
+
+        self.problemButton = Button(self,
+                                    width=50,
+                                    text="Signaler un problème avec mon villo")
+
+        self.disconnectButton = Button(self,
+                                        text="Déconnexion",
+                                        command=self.__disconnect)
+
+        # placement des widgets
+        self.villoButton.place(x=210,y=250)
+        self.consultButton.place(x=210,y=300)
+        self.historyButton.place(x=210,y=350)
+        self.problemButton.place(x=210,y=400)
+        self.disconnectButton.place(x=50,y=550)
+
+    def __destroyManagepage(self):
+        """ Détruit la page de gestion """
+        self.villoButton.destroy()
+        self.consultButton.destroy()
+        self.historyButton.destroy()
+        self.problemButton.destroy()
+        self.disconnectButton.destroy()
+
+    def __makeVillopage(self):
+        """ Dessine la page de gestion de villo """
+        self.__destroyPage()
+        self.page = "villo"
+
+        self.listStation = Listbox(self,
+                                   width=35,
+                                   height=30)
+
+        # TODO: Vérifier si l'utilisateur a déjà un Villo. Afficher les boutons en conséquences.
+
+        self.takeButton = Button(self,
+                                width=30,
+                                text="Prendre un villo")
+
+        self.putButton = Button(self,
+                                width=30,
+                                text="Déposer un villo")
+
+        self.backButton = Button(self,
+                                        text="Retour",
+                                        command=self.__makeManagepage)
+
+        self.listStation.place(x=50,y=20)
+        self.takeButton.place(x=400,y=275)
+        self.putButton.place(x=400,y=325)
+        self.backButton.place(x=50,y=550)
+
+    def __destroyVillopage(self):
+        """ Détruit la page de gestion de villo """
+        self.listStation.destroy()
+        self.takeButton.destroy()
+        self.putButton.destroy()
+        self.backButton.destroy()
+
+    def __makeHistorypage(self):
+        """ Dessine la page d'historique """
+        self.__destroyPage()
+        self.page = "history"
+
+        self.historyList = Listbox(self,
+                                    width=80,
+                                    height=30)
+
+        self.backButton = Button(self,
+                                        text="Retour",
+                                        command=self.__makeManagepage)
+
+        self.scrollbar = Scrollbar(self,orient=VERTICAL)
+        self.scrollbar.config(command=self.historyList.yview)
+
+        # TODO: Récupérer historique
+        self.historyList.insert(END, "Départ: JJ/MM/AA hh:mm:ss - Station / Arrivée: JJ/MM/AA hh:mm:ss - Station")
+
+        self.historyList.place(x=50,y=20)
+        self.scrollbar.place(x=700,y=20,relheight=0.85)
+        self.backButton.place(x=50,y=550)
+
+    def __destroyHistorypage(self):
+        """ Détruit la fenêtre d'historique """
+        self.historyList.destroy()
+        self.scrollbar.destroy()
+        self.backButton.destroy()
+
+    def __connect(self):
+        """ Gère la connexion à un compte """
+        # TODO: Gérer la connexion
+        self.connected = True
+        self.__makeManagepage()
+
+    def __disconnect(self):
+        """ Gère la déconnexion """
+        self.connected = False
+        self.__makeHomepage()
