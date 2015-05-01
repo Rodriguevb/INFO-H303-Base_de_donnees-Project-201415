@@ -20,14 +20,14 @@ def loadVillos(connection):
 			else:
 				working = 0
 
-			sql = "INSERT INTO `Villo` (`VID`,`DateMiseEnService`,`Modèle`,`EnEtat`) VALUES ("+str(vid)+",'"+date+"','"+model+"',"+str(working)+")"
+			sql = "INSERT INTO `Villo` (`VID`,`DateMiseEnService`,`Modèle`,`EnEtat`) VALUES ("+str(vid)+",'"+date+"',\""+model+"\","+str(working)+")"
 			connection.cursor().execute(sql)
 			connection.commit()
 
 		else:
 			header = False
 
-def loadStations():
+def loadStations(connection):
 	""" Charge les stations du fichier stations.csv dans la base de donnée """
 	reader = csv.reader(open("data/stations.csv", encoding="utf-8"),delimiter=";")
 	header = True
@@ -35,13 +35,18 @@ def loadStations():
 		if not header:
 			sid = int(row[0])
 			name = row[1]
-			payment = bool(row[2])
+			if bool(row[2]):
+				payment = 1
+			else:
+				payment = 0
 			capacity = int(row[3])
 			x = float(row[4])
 			y = float(row[5])
 
-			# TODO: Ajouter les stations à la base de donnée plutot que les afficher
-			print(sid,name,payment,capacity,x,y)
+			sql = "INSERT INTO `Station` (`SID`,`Nom`,`Longitude`,`Latitude`,`Capacité`,`BorneDePaiement`)\
+			VALUES ("+str(sid)+",\""+name+"\","+str(x)+","+str(y)+","+str(capacity)+","+str(payment)+")"
+			connection.cursor().execute(sql)
+			connection.commit()
 
 		else:
 			header = False
@@ -161,7 +166,7 @@ if ( __name__ == "__main__" ):
 								cursorclass=pymysql.cursors.DictCursor)
 	try:
 		loadVillos(connection)
-		loadStations()
+		loadStations(connection)
 		loadUsers()
 		loadTrips()
 	finally:
