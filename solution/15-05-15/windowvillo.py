@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 from tkinter import *
+from VilloDatabase import *
 
 class WindowVillo(Frame):
     def __init__(self,master=None):
@@ -10,6 +11,8 @@ class WindowVillo(Frame):
         self.page = ""
         self.connected = False
         self.__makeHomepage()
+
+        self.db = VilloDatabase()
         
     def __packFrame(self):
         """ affiche la frame """
@@ -409,9 +412,16 @@ class WindowVillo(Frame):
 
     def __connect(self):
         """ Gère la connexion à un compte """
-        # TODO: Gérer la connexion
-        self.connected = True
-        self.__makeManagepage()
+        uid = self.idEntry.get()
+        passwd = self.passEntry.get()
+
+        if self.db.checkAccount(uid,passwd):
+            self.connected = True
+            self.uid = uid
+            self.__makeManagepage()
+        else:
+            print("ID ou mot de passe incorrecte")
+            # TODO: Afficher une box d'erreur
 
     def __disconnect(self):
         """ Gère la déconnexion """
