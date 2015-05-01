@@ -38,6 +38,41 @@ def loadStations():
 		else:
 			header = False
 
+def loadTrips():
+	""" Charge les trajets du fichier trips.csv dans la base de donnée """
+	reader = csv.reader(open("data/trips.csv", encoding="utf-8"),delimiter=";")
+	header = True
+	for row in reader:
+		if not header:
+			vid = row[0]
+			# Utilisateur
+			uid = None
+			if row[1] != "None":
+				uid = int(row[1])
+			# Départ
+			depart = None
+			if row[2] != "None":
+				depart = int(row[2])
+
+			departTime = "0000-00-00 00:00:00"
+			if row[3] != "None":
+				departTime = row[3].replace("T"," ")
+
+			# Arrivée
+			end = None
+			if row[4] != "None":
+				end = int(row[4])
+
+			endTime = None
+			if row[5] != None:
+				endTime = row[5].replace("T", " ")
+
+
+			# Ajouter les déplacement à la base de donnée plutot que de les afficher
+			print(vid,uid,depart,departTime,end,endTime)
+		else:
+			header = False
+
 
 if ( __name__ == "__main__" ):
 	# TODO: Ajout des villos
@@ -46,3 +81,4 @@ if ( __name__ == "__main__" ):
 	loadStations()
 	# TODO: Ajout des utilisateurs
 	# TODO: Ajout des déplacements
+	loadTrips()
