@@ -51,7 +51,7 @@ def loadStations(connection):
 		else:
 			header = False
 
-def loadTrips():
+def loadTrips(connection):
 	""" Charge les trajets du fichier trips.csv dans la base de donnée """
 	reader = csv.reader(open("data/trips.csv", encoding="utf-8"),delimiter=";")
 	header = True
@@ -80,9 +80,19 @@ def loadTrips():
 			if row[5] != None:
 				endTime = row[5].replace("T", " ")
 
+			if (uid == None) and (depart == None): # Si il s'agit d'un placement de vélo
+				sql = "INSERT INTO `Trajet` (`VID`,`DateDépart`,`DateRetour`,`StationRetour`) \
+					VALUES ("+str(vid)+", '"+departTime+"','"+endTime+"',"+str(end)+")"
+			elif (end == None): # Si le vélo est toujours en déplacement
+				sql = "INSERT INTO `Trajet` (`VID`,`DateDépart`,`UID`, `StationDépart`) \
+					VALUES ("+str(vid)+",'"+departTime+"',"+str(uid)+","+str(depart)+")"
+			else: # Déplacement normal
+				sql = "INSERT INTO `Trajet` (`VID`,`DateDépart`,`UID`, `StationDépart`,`DateRetour`,`StationRetour`) \
+					VALUES ("+str(vid)+",'"+departTime+"',"+str(uid)+","+str(depart)+", '"+endTime+"', "+str(end)+")"
 
-			# TODO: Ajouter les déplacement à la base de donnée plutot que de les afficher
-			print(vid,uid,depart,departTime,end,endTime)
+			connection.cursor().execute(sql)
+			connection.commit()
+
 		else:
 			header = False
 
@@ -170,16 +180,24 @@ def parseTemporaryUser(temporary,connection):
 if ( __name__ == "__main__" ):
 	
 
+	print("Connexion a MySQL ...",end="")
 	# Connect to the database:
 	connection = pymysql.connect(host="localhost",
 								user="villodb",
 								passwd="villodb",
 								db="villo",
 								cursorclass=pymysql.cursors.DictCursor)
+	print("Fait !")
 	try:
+		print("Chargement des Villos")
 		loadVillos(connection)
+		print("Chargement des Stations")
 		loadStations(connection)
+		print("Chargement des utilisateurs")
 		loadUsers(connection)
-		#loadTrips()
+		print("Chargement des trajets")
+		loadTrips(connection)
 	finally:
+		print("Fermeture de la connexion")
 		connection.close()
+	print("FIN !")
