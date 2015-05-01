@@ -87,7 +87,7 @@ def loadTrips():
 			header = False
 
 
-def loadUsers():
+def loadUsers(connection):
 	""" Charge les utilisateurs du fichier users.xml dans la base de donnée """
 	tree = ET.parse("data/users.xml")
 	root = tree.getroot()
@@ -95,13 +95,13 @@ def loadUsers():
 	for child in root:
 		if child.tag == "subscribers":
 			for subscriber in child:
-				parseSubscriber(subscriber)
+				parseSubscriber(subscriber,connection)
 		elif child.tag == "temporaryUsers":
 			for temporary in child:
-				parseTemporaryUser(temporary)
+				parseTemporaryUser(temporary,connection)
 
 
-def parseSubscriber(subscriber):
+def parseSubscriber(subscriber,connection):
 	""" Parse un abonné dans le document xml """
 	for element in subscriber:
 		if element.tag == "userID":
@@ -135,10 +135,20 @@ def parseSubscriber(subscriber):
 
 	name = lastname + " " + firstname
 
-	# TODO: Ajouter les abonnés à la base de donnée plutot que de les afficher
-	print(UID,RFID, name, password, phone, city, cp, street, number, subscribeDate,expiryDate,card)
 
-def parseTemporaryUser(temporary):
+	sql = "INSERT INTO `Utilisateur` (`UID`,`MotDePasse`,`CarteDeCredit`,`DateExpiration`) \
+		VALUES ("+str(UID)+","+str(password)+","+str(card)+",'"+expiryDate+"')"
+	connection.cursor().execute(sql)
+	connection.commit()
+
+	sql = "INSERT INTO `Abonné` (`UID`,`RFID`,`Nom`,`Rue`,`Numéro`,`CodePostal`,`Ville`,`Téléphone`,`DateInscription`) \
+		VALUES ("+str(UID)+","+str(RFID)+",\""+name+"\",\""+street+"\","+str(number)+","+str(cp)+",\""+city+"\", \""+phone+"\",'"+subscribeDate+"')"
+	connection.cursor().execute(sql)
+	connection.commit()
+
+
+
+def parseTemporaryUser(temporary,connection):
 	""" Parse un utilisateur temporaire dans le document xml """
 	for element in temporary:
 		if element.tag == "userID":
@@ -146,12 +156,14 @@ def parseTemporaryUser(temporary):
 		if element.tag == "password":
 			password = int(element.text)
 		if element.tag == "expiryDate":
-			expiry = element.text.replace("T", " ")
+			expiryDate = element.text.replace("T", " ")
 		if element.tag == "card":
 			card = int(element.text)
 
-	# TODO: Ajouter les utilisateurs temporaires à la base de donnée plutot que les afficher
-	print(UID,password,expiry,card)
+	sql = "INSERT INTO `Utilisateur` (`UID`,`MotDePasse`,`CarteDeCredit`,`DateExpiration`) \
+		VALUES ("+str(UID)+","+str(password)+","+str(card)+",'"+expiryDate+"')"
+	connection.cursor().execute(sql)
+	connection.commit()
 
 
 
@@ -167,7 +179,7 @@ if ( __name__ == "__main__" ):
 	try:
 		loadVillos(connection)
 		loadStations(connection)
-		loadUsers()
-		loadTrips()
+		loadUsers(connection)
+		#loadTrips()
 	finally:
 		connection.close()
