@@ -27,3 +27,15 @@ class VilloDatabase:
 			return result['MotDePasse'] == int(passwd)
 		else:
 			return False
+
+	def getStationNameList(self):
+		""" Renvoie la liste de nom des stations """
+		sql = "SELECT `Nom` FROM `Station` ORDER BY `Nom`"
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchall()
+
+		namelist = list()
+		for station in result:
+			namelist.append(station['Nom'])
+		return namelist

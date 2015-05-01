@@ -99,8 +99,9 @@ class WindowVillo(Frame):
             self.buttonBack.config(command=self.__makeHomepage)
 
         # On rempli la liste de station
-        # TODO: Afficher les vrai stations / Villo
-        self.listStation.insert(END,"test")
+        stationlist = self.db.getStationNameList()
+        for station in stationlist:
+            self.listStation.insert(END,station)
         
         # On place les widgets
         self.listStation.place(x=50,y=20)
