@@ -23,4 +23,7 @@ class VilloDatabase:
 		cursor = self.connection.cursor()
 		cursor.execute(sql)
 		result = cursor.fetchone()
-		return result != None
+		if (result != None) and (passwd.isdigit()):
+			return result['MotDePasse'] == int(passwd)
+		else:
+			return False
