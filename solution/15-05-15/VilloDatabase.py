@@ -19,12 +19,12 @@ class VilloDatabase:
 
 	def checkAccount(self, id, passwd):
 		""" Vérifie si le compte existe et que le mot de passe est bon """
-		sql = "SELECT `MotDePasse` FROM `Utilisateur` WHERE `uid`="+str(id)+""
+		sql = "SELECT `uid` FROM `Utilisateur` WHERE `uid`="+str(id)+" AND `MotDePasse`="+passwd+" "
 		cursor = self.connection.cursor()
 		cursor.execute(sql)
 		result = cursor.fetchone()
-		if (result != None) and (passwd.isdigit()):
-			return result['MotDePasse'] == int(passwd)
+		if result != None :
+			return True
 		else:
 			return False
 
@@ -39,3 +39,12 @@ class VilloDatabase:
 		for station in result:
 			namelist.append(station['Nom'])
 		return namelist
+
+	def isUserUsingVillo(self, uid):
+		""" Vérifie si un utilisateur utilise un villo """
+		sql = "SELECT `VID`,`DateDépart` FROM `Trajet` WHERE `UID`="+uid+" AND `StationRetour` IS NULL"
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchall()
+
+		return len(result) == 1

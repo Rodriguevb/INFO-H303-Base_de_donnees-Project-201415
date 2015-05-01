@@ -340,7 +340,12 @@ class WindowVillo(Frame):
                                    width=35,
                                    height=30)
 
+        stationlist = self.db.getStationNameList()
+        for station in stationlist:
+            self.listStation.insert(END,station)
+
         # TODO: Vérifier si l'utilisateur a déjà un Villo. Afficher les boutons en conséquences.
+        hasVillo = self.db.isUserUsingVillo(self.uid)
 
         self.takeButton = Button(self,
                                 width=30,
@@ -358,8 +363,10 @@ class WindowVillo(Frame):
 
         # Placements widgets
         self.listStation.place(x=50,y=20)
-        self.takeButton.place(x=400,y=275)
-        self.putButton.place(x=400,y=325)
+        if not hasVillo:
+            self.takeButton.place(x=400,y=300)
+        else:
+            self.putButton.place(x=400,y=300)
         self.backButton.place(x=50,y=550)
 
     def __destroyVillopage(self):
