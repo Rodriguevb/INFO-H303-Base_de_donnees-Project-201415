@@ -1,5 +1,5 @@
 CREATE TABLE `Utilisateur` (
-	`UID` int unsigned NOT NULL AUTO_INCREMENT,
+	`UID` int unsigned NOT NULL,
 	`MotDePasse` smallint(4) unsigned zerofill NOT NULL,
 	`CarteDeCredit` bigint(16) unsigned zerofill NOT NULL,
 	`DateExpiration` datetime NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE `Utilisateur` (
 );
 
 CREATE TABLE `Villo` (
-	`VID` smallint unsigned NOT NULL AUTO_INCREMENT,
+	`VID` smallint unsigned NOT NULL,
 	`DateMiseEnService` datetime NOT NULL,
 	`Modèle` varchar(12) NOT NULL,
 	`EnEtat` tinyint(1) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `Abonné` (
 );
 
 CREATE TABLE `Station` (
-	`SID` smallint unsigned NOT NULL AUTO_INCREMENT,
+	`SID` smallint unsigned NOT NULL,
 	`Nom` varchar(50) NOT NULL,
 	`Longitude` float NOT NULL,
 	`Latitude` float NOT NULL,

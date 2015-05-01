@@ -2,8 +2,10 @@
 # -*- coding:utf-8 -*-
 import csv
 import xml.etree.ElementTree as ET
+import pymysql.cursors
 
-def loadVillos():
+
+def loadVillos(connection):
 	""" Charge les villos du fichier villos.csv dans la base de donnée """
 	reader = csv.reader(open("data/villos.csv", encoding="utf-8"),delimiter=';')
 	i = 0;
@@ -13,10 +15,15 @@ def loadVillos():
 			vid = int(row[0])
 			date = row[1].replace("T", " ") # Mise en service
 			model = row[2]
-			working = bool(row[3])
+			if bool(row[3]):
+				working = 1
+			else:
+				working = 0
 
-			# TODO: Ajouter les villos à la base de données plutot que les afficher
-			print(vid,date,model,working)
+			sql = "INSERT INTO `Villo` (`VID`,`DateMiseEnService`,`Modèle`,`EnEtat`) VALUES ("+str(vid)+",'"+date+"','"+model+"',"+str(working)+")"
+			connection.cursor().execute(sql)
+			connection.commit()
+
 		else:
 			header = False
 
@@ -144,11 +151,18 @@ def parseTemporaryUser(temporary):
 
 
 if ( __name__ == "__main__" ):
-	# TODO: Ajout des villos
-	loadVillos()
-	# TODO: Ajout des stations
-	loadStations()
-	# TODO: Ajout des utilisateurs
-	loadUsers()
-	# TODO: Ajout des déplacements
-	loadTrips()
+	
+
+	# Connect to the database:
+	connection = pymysql.connect(host="localhost",
+								user="villodb",
+								passwd="villodb",
+								db="villo",
+								cursorclass=pymysql.cursors.DictCursor)
+	try:
+		loadVillos(connection)
+		loadStations()
+		loadUsers()
+		loadTrips()
+	finally:
+		connection.close()
