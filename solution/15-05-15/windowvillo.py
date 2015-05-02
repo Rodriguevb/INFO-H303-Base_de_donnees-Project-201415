@@ -411,10 +411,12 @@ class WindowVillo(Frame):
 
     def __loadVilloConsult(self):
         """ Charge une liste de villo pour la consultation """
-        # TODO: Charger la liste
         index = self.listStation.curselection()
         stationName = self.listStation.get(index)
         villos = self.db.getVilloInStation(stationName)
+        size = self.listVillo.size();
+        if size > 0:
+            self.listVillo.delete(0,size)
         for v in villos:
             self.listVillo.insert(END, v)
 
