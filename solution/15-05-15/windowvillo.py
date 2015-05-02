@@ -3,7 +3,8 @@
 
 from tkinter import *
 from VilloDatabase import *
-from datetime import datetime
+from datetime import *
+import random
 
 class WindowVillo(Frame):
     def __init__(self,master=None):
@@ -123,9 +124,6 @@ class WindowVillo(Frame):
         self.page = "registry"
 
         # Création widgets
-        
-        self.idEntry = Entry(self)
-        self.idLabel = Label(self, text="ID :")
 
         self.passEntry = Entry(self, show="*")
         self.passLabel = Label(self, text="Mot de passe :")
@@ -169,8 +167,6 @@ class WindowVillo(Frame):
 
 
         # Placement widgets
-        self.idEntry.place(x=420,y=70)
-        self.idLabel.place(x=280,y=70)
         
         self.passEntry.place(x=420,y=100)
         self.passLabel.place(x=280,y=100)
@@ -208,8 +204,6 @@ class WindowVillo(Frame):
 
     def __destroyRegistrypage(self):
         """ Détruit la page d'enregistrement """
-        self.idEntry.destroy()
-        self.idLabel.destroy()
         
         self.passEntry.destroy()
         self.passLabel.destroy()
@@ -429,8 +423,117 @@ class WindowVillo(Frame):
 
     def __register(self):
         """ Gère l'enregistrement d'un utilisateur """
-        # TODO: Gérer l'enregistrement
-        return
+        ok = self.__checkForm()
+
+        if ok:
+            passwd = self.passEntry.get()
+            name = self.nameEntry.get()
+            phone = self.phoneEntry.get()
+            city = self.cityEntry.get()
+            cp = self.cpEntry.get()
+            street = self.streetEntry.get()
+            number = self.numberEntry.get()
+            card = self.cardEntry.get()
+
+            
+            uid = str(self.db.getNewUserID())
+            rfid = str(self.__generateRFID())
+
+            dateSub = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(dateSub)
+            dateEnd = (datetime.now() + timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
+            print(dateEnd)
+            self.db.createSubscriber(uid,rfid,passwd,name,phone,city,cp,street,number,card,dateSub,dateEnd)
+
+            print("Compte cree, votre id est " + uid) # TODO: Afficher une box de validation
+
+
+    def __generateRFID(self):
+        """ Génère un RFID et vérifie qu'il est disponnible """
+        free = False
+        while not free:
+            rfid = random.randint(10000000000000000000,99999999999999999999)
+            free = self.db.isRFIDfree(rfid)
+        return rfid
+
+    def __checkForm(self):
+        """ Vérifie les erreurs dans le formulaire """
+        ok = True
+        if not self.__checkPass():
+            ok = False
+            print("Le mot de passe doit etre une suite de 4 chiffres") # TODO: Afficher une box d'erreur.
+        if not self.__checkPassEqual():
+            ok = False
+            print("Le mot de passe et sa confirmation sont differents") # TODO: Afficher une box d'erreur.
+        if not self.__checkName():
+            ok = False
+            print("La taille maximale du nom est de 50 caractere") # TODO: Afficher une box d'erreur.
+        if not self.__checkPhone():
+            ok = False
+            print("Erreur dans le format du telephone") # TODO: Afficher une box d'erreur.
+        if not self.__checkCity():
+            ok = False
+            print("La ville doit etre entre 1 et 50 caractere") # TODO: Afficher une box d'erreur.
+        if not self.__checkPostcode():
+            ok = False
+            print("Le code postal est une suite de 4 chiffres") # TODO: Afficher une box d'erreur.
+        if not self.__checkStreet():
+            ok = False
+            print("La rue doit etre entre 1 et 100 caractere") # TODO: Afficher une box d'erreur.
+        if not self.__checkNumber():
+            ok = False
+            print("Le numero doit etre un nombre") # TODO: Afficher une box d'erreur.
+        if not self.__checkCard():
+            ok = False
+            print("La carte doit etre une suite de 16 chiffre") # TODO: Afficher une box d'erreur.
+
+        return ok
+
+    def __checkPass(self):
+        """ Vérifie que le mot de passe est correct """
+        passwd = self.passEntry.get()
+        return (len(passwd)==4) and (passwd.isdigit())
+
+    def __checkPassEqual(self):
+        """ Vérifie que le champ mot de passe et le champ de confirmation sont égaux """
+        passwd = self.passEntry.get()
+        passwdval = self.passValEntry.get()
+        return passwd == passwdval
+
+    def __checkName(self):
+        """ Vérifie l'entrée concernant le nom """
+        name = self.nameEntry.get()
+        return len(name) <= 50 and len(name) >= 1
+
+    def __checkPhone(self):
+        """ Vérifie l'entrée du téléphone """
+        phone = self.phoneEntry.get()
+        return (len(phone) == 10) and (phone.isdigit()) and (phone[0]=="0")
+
+    def __checkCity(self):
+        """ Vérifie l'entrée de la ville """
+        city = self.cityEntry.get()
+        return len(city) <= 50 and len(city) >= 1
+
+    def __checkPostcode(self):
+        """ Vérifie l'entrée du code postal """
+        cp = self.cpEntry.get()
+        return (len(cp)==4) and cp.isdigit()
+
+    def __checkStreet(self):
+        """ Vérifie l'entrée de la rue """
+        street = self.streetEntry.get()
+        return len(street) <= 100 and len(street) >=1
+
+    def __checkNumber(self):
+        """ Vérifie l'entrée du numéro """
+        number = self.numberEntry.get()
+        return number.isdigit()
+
+    def __checkCard(self):
+        """ Vérifie l'entrée de la carte bancaire """
+        card = self.cardEntry.get()
+        return len(card) == 16 and card.isdigit()
 
     def __connect(self):
         """ Gère la connexion à un compte """

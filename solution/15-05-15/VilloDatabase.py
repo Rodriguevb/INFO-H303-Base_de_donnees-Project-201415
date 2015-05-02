@@ -143,3 +143,36 @@ class VilloDatabase:
 		cursor.execute(sql)
 		self.connection.commit()
 
+	def getNewUserID(self):
+		""" Récupère un nouvel id Utilisateur """
+
+		sql = "SELECT max(`UID`) as id FROM `Utilisateur`"
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchone()
+		
+		return result['id']+1
+
+	def isRFIDfree(self,rfid):
+		""" Vérifie si un RFID est libre """
+
+		sql = "SELECT * FROM `Abonné` WHERE `RFID`="+str(rfid)+" "
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchall()
+
+		return len(result) == 0
+
+	def createSubscriber(self,uid,rfid,passwd,name,phone,city,cp,street,number,card,dateSub,dateExp):
+		""" Crée un utilisateur abonné """
+		sql = "INSERT INTO `Utilisateur` (`UID`,`MotDePasse`,`CarteDeCredit`,`DateExpiration`) \
+		VALUES ("+uid+","+passwd+","+card+",'"+dateExp+"')"
+		self.connection.cursor().execute(sql)
+		self.connection.commit()
+
+		sql = "INSERT INTO `Abonné` (`UID`,`RFID`,`Nom`,`Rue`,`Numéro`,`CodePostal`,`Ville`,`Téléphone`,`DateInscription`) \
+		VALUES ("+uid+","+rfid+",\""+name+"\",\""+street+"\","+number+","+cp+",\""+city+"\", \""+phone+"\",'"+dateSub+"')"
+		self.connection.cursor().execute(sql)
+		self.connection.commit()
+
+
