@@ -77,10 +77,10 @@ class VilloDatabase:
 	def getVilloInStation(self, stationName):
 		""" Renvoie la liste des villos dans une station """
 
-		sql1 = "SELECT t1.VID, MAX(t1.DateRetour) as maxdate, t1.StationRetour \
-			FROM `Trajet` t1 \
-			WHERE t1.VID NOT IN (SELECT t2.VID FROM `Trajet` t2 WHERE t2.StationRetour IS NULL) \
-			GROUP BY t1.VID "
+		sql1 = "SELECT Trajet.VID, Trajet.DateRetour, Trajet.StationRetour FROM `Trajet` \
+				INNER JOIN \
+				(SELECT tr.VID as vid, max(DateRetour) as dr FROM `Trajet` as tr GROUP BY tr.VID) as t \
+				ON Trajet.VID = t.vid AND Trajet.DateRetour = t.dr ORDER BY Trajet.VID"
 
 		sql2 = "SELECT r.VID \
 			FROM ("+sql1+") r, Station s \
