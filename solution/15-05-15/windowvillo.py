@@ -419,7 +419,10 @@ class WindowVillo(Frame):
         if size > 0:
             self.listVillo.delete(0,size)
         for v in villos:
-            self.listVillo.insert(END, v)
+            string = str(v['VID']) + ". " + v['Modèle']
+            if v['EnEtat'] == 0:
+                string += " : Cassé"
+            self.listVillo.insert(END, string)
 
     def __register(self):
         """ Gère l'enregistrement d'un utilisateur """
@@ -446,14 +449,26 @@ class WindowVillo(Frame):
 
     def __takeVillo(self):
         """ Gère l'action de prendre un villo """
-        return
+        index = self.listStation.curselection()
+        stationName = self.listStation.get(index)
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        villo = self.db.getVilloInStation(stationName)
+        if len(villo) > 0:
+            self.db.takeVillo(self.uid, stationName, date, villo[0]['VID'])
+            #TODO: Afficher un message de validation
+            print("Vous pouvez prendre le Villo n " + str(villo[0]['VID']) )
+        else:
+            #TODO: Afficher un message d'erreur
+            print("Il n'y a plus de villo dans cette station")
+
+
 
     def __putVillo(self):
         """  gère l'action de remettre un villo """
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         index = self.listStation.curselection()
         stationName = self.listStation.get(index)
-
+        # TODO: Vérifier qu'il y a de la place dans la station
         self.db.putVillo(self.uid, date, stationName)
         self.__makeManagepage()
         # TODO: Afficher une box de validation

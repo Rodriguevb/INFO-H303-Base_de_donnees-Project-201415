@@ -96,13 +96,7 @@ class VilloDatabase:
 		cursor.execute(sql3)
 		result = cursor.fetchall()
 
-		vlist=list()
-		for v in result:
-			string = str(v['VID']) + ". " + v['Modèle']
-			if v['EnEtat'] == 0:
-				string += " : Cassé"
-			vlist.append(string)
-		return vlist
+		return result
 
 	def putVillo(self, uid, dateReturn, stationName):
 		""" Rend un villo à la date et à la station passer en paramètre. """
@@ -119,6 +113,16 @@ class VilloDatabase:
 				AND `VID` = "+str(trip['VID'])+" "
 
 		cursor.execute(sql2)
+		self.connection.commit()
+
+	def takeVillo(self, uid, stationName, dateStart, vid):
+		""" Donner un villo. Provient de la station à la date pour l'utilisateur passer en paramètre. """
+		cursor = self.connection.cursor()
+
+		sql = "INSERT INTO `Trajet` (`VID`,`DateDépart`,`UID`, `StationDépart`) \
+					VALUES ("+str(vid)+",'"+str(dateStart)+"',"+str(uid)+",\""+stationName+"\")"
+
+		cursor.execute(sql)
 		self.connection.commit()
 
 
