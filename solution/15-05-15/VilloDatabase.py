@@ -74,4 +74,33 @@ class VilloDatabase:
 			history.append(string)
 		return history
 
+	def getVilloInStation(self, stationName):
+		""" Renvoie la liste des villos dans une station """
+
+		sql1 = "SELECT t1.VID, MAX(t1.DateRetour) as maxdate, t1.StationRetour \
+			FROM `Trajet` t1 \
+			WHERE t1.VID NOT IN (SELECT t2.VID FROM `Trajet` t2 WHERE t2.StationRetour IS NULL) \
+			GROUP BY t1.VID "
+
+		sql2 = "SELECT r.VID \
+			FROM ("+sql1+") r, Station s \
+			WHERE r.StationRetour = s.SID \
+			AND s.Nom = \""+stationName+"\" "
+
+		sql3 = "SELECT v.VID, v.Modèle, v.EnEtat \
+			FROM ("+sql2+") res, Villo v \
+			WHERE res.VID = v.VID"
+		
+
+		cursor = self.connection.cursor()
+		cursor.execute(sql3)
+		result = cursor.fetchall()
+
+		vlist=list()
+		for v in result:
+			string = str(v['VID']) + ". " + v['Modèle']
+			if v['EnEtat'] == 0:
+				string += " : Cassé"
+			vlist.append(string)
+		return vlist
 
