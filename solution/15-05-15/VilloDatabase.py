@@ -104,3 +104,21 @@ class VilloDatabase:
 			vlist.append(string)
 		return vlist
 
+	def putVillo(self, uid, dateReturn, stationName):
+		""" Rend un villo à la date et à la station passer en paramètre. """
+		cursor = self.connection.cursor()
+
+		sql1 = "SELECT `VID`,`DateDépart` FROM `Trajet` WHERE `UID`="+uid+" AND `StationRetour` IS NULL"
+		cursor.execute(sql1)
+		trip = cursor.fetchone()
+
+		sql2 = "UPDATE `Trajet` \
+				SET `StationRetour` = (SELECT `SID` FROM `Station` WHERE `Nom`=\""+stationName+"\" ), \
+				`DateRetour` = '"+dateReturn+"' \
+				WHERE `DateDépart` = '"+str(trip['DateDépart'])+"' \
+				AND `VID` = "+str(trip['VID'])+" "
+
+		cursor.execute(sql2)
+		self.connection.commit()
+
+

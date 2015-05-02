@@ -3,6 +3,7 @@
 
 from tkinter import *
 from VilloDatabase import *
+from datetime import datetime
 
 class WindowVillo(Frame):
     def __init__(self,master=None):
@@ -449,4 +450,11 @@ class WindowVillo(Frame):
 
     def __putVillo(self):
         """  gère l'action de remettre un villo """
-        return
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        index = self.listStation.curselection()
+        stationName = self.listStation.get(index)
+
+        self.db.putVillo(self.uid, date, stationName)
+        self.__makeManagepage()
+        # TODO: Afficher une box de validation
+
