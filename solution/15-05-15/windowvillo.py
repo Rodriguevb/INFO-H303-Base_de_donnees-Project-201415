@@ -394,8 +394,9 @@ class WindowVillo(Frame):
         self.scrollbar.config(command=self.historyList.yview)
 
         # On rempli la liste des déplacements
-        # TODO: Récupérer historique
-        self.historyList.insert(END, "Départ: JJ/MM/AA hh:mm:ss - Station / Arrivée: JJ/MM/AA hh:mm:ss - Station")
+        history = self.db.getUserHistory(self.uid)
+        for trips in history:
+            self.historyList.insert(END, trips)
 
         # Placement widgets
         self.historyList.place(x=50,y=20)

@@ -48,3 +48,30 @@ class VilloDatabase:
 		result = cursor.fetchall()
 
 		return len(result) == 1
+
+	def getUserHistory(self, uid):
+		""" Renvoie l'historique des déplacement d'un utilisateur """
+
+		sql = "SELECT t.DateDépart, t.DateRetour, s1.Nom, s2.Nom \
+			FROM `Trajet` t, `Station` s1, `Station` s2 \
+			WHERE t.UID = "+str(uid)+" \
+			AND t.StationDépart = s1.SID \
+			AND t.StationRetour = s2.SID \
+			AND t.StationRetour IS NOT NULL \
+			AND t.StationDépart IS NOT NULL \
+			ORDER BY t.DateDépart DESC"
+
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchall()
+
+		history = list()
+		for r in result:
+			string = ""
+			"Départ: JJ/MM/AA hh:mm:ss - Station / Arrivée: JJ/MM/AA hh:mm:ss - Station"
+			string += "Départ: "+str(r['DateDépart'])+" - " + r['Nom'] +" / "
+			string += "Arrivée: "+ str(r['DateRetour'])+" - " + r["s2.Nom"]
+			history.append(string)
+		return history
+
+
