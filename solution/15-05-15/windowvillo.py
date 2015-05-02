@@ -460,6 +460,7 @@ class WindowVillo(Frame):
         else:
             #TODO: Afficher un message d'erreur
             print("Il n'y a plus de villo dans cette station")
+        self.__makeManagepage()
 
 
 
