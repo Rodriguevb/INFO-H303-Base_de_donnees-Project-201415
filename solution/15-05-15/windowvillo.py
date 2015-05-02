@@ -292,6 +292,8 @@ class WindowVillo(Frame):
         self.__destroyPage()
         self.page="manage"
 
+        hasVillo = self.db.isUserUsingVillo(self.uid)
+
         # Création widgets
         self.villoButton = Button(self,
                                  width=50,
@@ -310,7 +312,8 @@ class WindowVillo(Frame):
 
         self.problemButton = Button(self,
                                     width=50,
-                                    text="Signaler un problème avec mon villo")
+                                    text="Signaler un problème avec mon villo",
+                                    command=self.__signalProblem)
 
         self.disconnectButton = Button(self,
                                         text="Déconnexion",
@@ -320,7 +323,8 @@ class WindowVillo(Frame):
         self.villoButton.place(x=210,y=250)
         self.consultButton.place(x=210,y=300)
         self.historyButton.place(x=210,y=350)
-        self.problemButton.place(x=210,y=400)
+        if hasVillo:
+            self.problemButton.place(x=210,y=400)
         self.disconnectButton.place(x=50,y=550)
 
     def __destroyManagepage(self):
@@ -345,7 +349,6 @@ class WindowVillo(Frame):
         for station in stationlist:
             self.listStation.insert(END,station)
 
-        # TODO: Vérifier si l'utilisateur a déjà un Villo. Afficher les boutons en conséquences.
         hasVillo = self.db.isUserUsingVillo(self.uid)
 
         self.takeButton = Button(self,
@@ -473,4 +476,11 @@ class WindowVillo(Frame):
         self.db.putVillo(self.uid, date, stationName)
         self.__makeManagepage()
         # TODO: Afficher une box de validation
+
+    def __signalProblem(self):
+        """ Signale un problème avec un villo """
+        vid = self.db.getVilloIDFromUser(self.uid)
+        self.db.signalProblem(vid)
+        #TODO: Afficher une box de validation
+        print("Probleme signale")
 

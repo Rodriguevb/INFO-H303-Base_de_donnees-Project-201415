@@ -125,4 +125,21 @@ class VilloDatabase:
 		cursor.execute(sql)
 		self.connection.commit()
 
+	def getVilloIDFromUser(self, uid):
+		""" Renvoie l'id du Villo qu'utilise un utilisateur. """
+		sql = "SELECT `VID` FROM `Trajet` WHERE `UID`="+uid+" AND `StationRetour` IS NULL"
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchone()
+
+		return result['VID']
+
+	def signalProblem(self, vid):
+		""" Signal un problème sur le villo passé en paramètre """
+		sql = "UPDATE `Villo` \
+				SET `EnEtat` = 0 \
+				WHERE `VID`= "+str(vid)+" "
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		self.connection.commit()
 
