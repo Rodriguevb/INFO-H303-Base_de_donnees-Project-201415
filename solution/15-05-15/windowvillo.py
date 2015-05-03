@@ -4,6 +4,7 @@
 from tkinter import *
 from VilloDatabase import *
 from datetime import *
+import tkinter.messagebox
 import random
 
 class WindowVillo(Frame):
@@ -445,7 +446,7 @@ class WindowVillo(Frame):
             print(dateEnd)
             self.db.createSubscriber(uid,rfid,passwd,name,phone,city,cp,street,number,card,dateSub,dateEnd)
 
-            print("Compte cree, votre id est " + uid) # TODO: Afficher une box de validation
+            tkinter.messagebox.showinfo("Compte créé","Compte créé, votre id est " + uid)
 
 
     def __generateRFID(self):
@@ -461,31 +462,31 @@ class WindowVillo(Frame):
         ok = True
         if not self.__checkPass():
             ok = False
-            print("Le mot de passe doit etre une suite de 4 chiffres") # TODO: Afficher une box d'erreur.
-        if not self.__checkPassEqual():
+            tkinter.messagebox.showinfo("Erreur","Le mot de passe doit etre une suite de 4 chiffres")
+        elif not self.__checkPassEqual():
             ok = False
-            print("Le mot de passe et sa confirmation sont differents") # TODO: Afficher une box d'erreur.
-        if not self.__checkName():
+            tkinter.messagebox.showinfo("Erreur","Le mot de passe et sa confirmation sont differents")
+        elif not self.__checkName():
             ok = False
-            print("La taille maximale du nom est de 50 caractere") # TODO: Afficher une box d'erreur.
-        if not self.__checkPhone():
+            tkinter.messagebox.showinfo("Erreur","La taille maximale du nom est de 50 caractere")
+        elif not self.__checkPhone():
             ok = False
-            print("Erreur dans le format du telephone") # TODO: Afficher une box d'erreur.
-        if not self.__checkCity():
+            tkinter.messagebox.showinfo("Erreur","Erreur dans le format du telephone")
+        elif not self.__checkCity():
             ok = False
-            print("La ville doit etre entre 1 et 50 caractere") # TODO: Afficher une box d'erreur.
-        if not self.__checkPostcode():
+            tkinter.messagebox.showinfo("Erreur","La ville doit etre entre 1 et 50 caractere")
+        elif not self.__checkPostcode():
             ok = False
-            print("Le code postal est une suite de 4 chiffres") # TODO: Afficher une box d'erreur.
-        if not self.__checkStreet():
+            tkinter.messagebox.showinfo("Erreur","Le code postal est une suite de 4 chiffres")
+        elif not self.__checkStreet():
             ok = False
-            print("La rue doit etre entre 1 et 100 caractere") # TODO: Afficher une box d'erreur.
-        if not self.__checkNumber():
+            tkinter.messagebox.showinfo("Erreur","La rue doit etre entre 1 et 100 caractere")
+        elif not self.__checkNumber():
             ok = False
-            print("Le numero doit etre un nombre") # TODO: Afficher une box d'erreur.
-        if not self.__checkCard():
+            tkinter.messagebox.showinfo("Erreur","Le numero doit etre un nombre")
+        elif not self.__checkCard():
             ok = False
-            print("La carte doit etre une suite de 16 chiffre") # TODO: Afficher une box d'erreur.
+            tkinter.messagebox.showinfo("Erreur","La carte doit etre une suite de 16 chiffre")
 
         return ok
 
@@ -535,18 +536,29 @@ class WindowVillo(Frame):
         card = self.cardEntry.get()
         return len(card) == 16 and card.isdigit()
 
+    def __checkID(self):
+        """ Vérifie l'entrée ID lors de la connection """
+        return self.idEntry.get().isdigit()
+
     def __connect(self):
         """ Gère la connexion à un compte """
         uid = self.idEntry.get()
         passwd = self.passEntry.get()
+
+        if not self.__checkPass():
+            tkinter.messagebox.showinfo("Erreur","Le mot de passe doit etre une suite de 4 chiffres")
+            return
+        if not self.__checkID():
+            tkinter.messagebox.showinfo("Erreur","L'ID doit être un nombre'")
+            return
 
         if self.db.checkAccount(uid,passwd):
             self.connected = True
             self.uid = uid
             self.__makeManagepage()
         else:
-            print("ID ou mot de passe incorrecte")
-            # TODO: Afficher une box d'erreur
+            tkinter.messagebox.showinfo("Erreur","ID ou mot de passe incorrecte")
+            
 
     def __disconnect(self):
         """ Gère la déconnexion """
@@ -563,13 +575,11 @@ class WindowVillo(Frame):
             dateExp = self.db.getUserExpiryDate(self.uid)
             if dateExp != None and dateExp > datetime.now():
                 self.db.takeVillo(self.uid, stationName, date, villo[0]['VID'])
-                #TODO: Afficher un message de validation
-                print("Vous pouvez prendre le Villo n " + str(villo[0]['VID']) )
+                tkinter.messagebox.showinfo("OK","Vous pouvez prendre le Villo n " + str(villo[0]['VID']) )
             else:
-                print("Vous n'etes plus abonne")
+                tkinter.messagebox.showinfo("Erreur","Vous n'êtes plus abonné")
         else:
-            #TODO: Afficher un message d'erreur
-            print("Il n'y a plus de villo dans cette station")
+            tkinter.messagebox.showinfo("Erreur","Il n'y a plus de villo dans cette station")
         self.__makeManagepage()
 
 
@@ -582,12 +592,11 @@ class WindowVillo(Frame):
         # TODO: Vérifier qu'il y a de la place dans la station
         self.db.putVillo(self.uid, date, stationName)
         self.__makeManagepage()
-        # TODO: Afficher une box de validation
+        tkinter.messagebox.showinfo("Validation", "Villo remis en place")
 
     def __signalProblem(self):
         """ Signale un problème avec un villo """
         vid = self.db.getVilloIDFromUser(self.uid)
         self.db.signalProblem(vid)
-        #TODO: Afficher une box de validation
-        print("Probleme signale")
+        tkinter.messagebox.showinfo("Validation","Probleme signalé")
 
