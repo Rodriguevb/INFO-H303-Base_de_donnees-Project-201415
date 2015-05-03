@@ -74,22 +74,27 @@ class VilloDatabase:
 			history.append(string)
 		return history
 
-	def getVilloInStation(self, stationName):
+	def getVilloInStation(self, stationName,ignoreBroken=False):
 		""" Renvoie la liste des villos dans une station """
 
-		sql1 = "SELECT Trajet.VID, Trajet.DateRetour, Trajet.StationRetour FROM `Trajet` \
+		sql1 = "SELECT Trajet.VID, Trajet.DateDépart, Trajet.StationRetour FROM `Trajet` \
 				INNER JOIN \
-				(SELECT tr.VID as vid, max(DateRetour) as dr FROM `Trajet` as tr GROUP BY tr.VID) as t \
-				ON Trajet.VID = t.vid AND Trajet.DateRetour = t.dr ORDER BY Trajet.VID"
+				(SELECT tr.VID as vid, max(tr.DateDépart) as dr FROM `Trajet` as tr GROUP BY tr.VID) as t \
+				ON Trajet.VID = t.vid AND Trajet.DateDépart = t.dr \
+				ORDER BY Trajet.VID"
 
 		sql2 = "SELECT r.VID \
 			FROM ("+sql1+") r, Station s \
 			WHERE r.StationRetour = s.SID \
 			AND s.Nom = \""+stationName+"\" "
 
+
 		sql3 = "SELECT v.VID, v.Modèle, v.EnEtat \
 			FROM ("+sql2+") res, Villo v \
 			WHERE res.VID = v.VID"
+
+		if ignoreBroken:
+			sql3 += " AND v.EnEtat = 1"
 		
 
 		cursor = self.connection.cursor()

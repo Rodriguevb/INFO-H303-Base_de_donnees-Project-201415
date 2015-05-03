@@ -558,7 +558,7 @@ class WindowVillo(Frame):
         index = self.listStation.curselection()
         stationName = self.listStation.get(index)
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        villo = self.db.getVilloInStation(stationName)
+        villo = self.db.getVilloInStation(stationName, True)
         if len(villo) > 0:
             self.db.takeVillo(self.uid, stationName, date, villo[0]['VID'])
             #TODO: Afficher un message de validation
