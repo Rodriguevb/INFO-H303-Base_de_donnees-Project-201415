@@ -180,4 +180,15 @@ class VilloDatabase:
 		self.connection.cursor().execute(sql)
 		self.connection.commit()
 
+	def getUserExpiryDate(self, uid):
+		""" Renvoie la date d'expiration d'un utilisateur """
+		sql = "SELECT `DateExpiration` FROM `Utilisateur` WHERE `UID` = "+str(uid)+" "
+		cursor = self.connection.cursor()
+		cursor.execute(sql)
+		result = cursor.fetchone()
+		if result != None:
+			return result['DateExpiration']
+		else:
+			return None
+
 

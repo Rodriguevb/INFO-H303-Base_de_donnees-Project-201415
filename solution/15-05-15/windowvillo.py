@@ -560,9 +560,13 @@ class WindowVillo(Frame):
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         villo = self.db.getVilloInStation(stationName, True)
         if len(villo) > 0:
-            self.db.takeVillo(self.uid, stationName, date, villo[0]['VID'])
-            #TODO: Afficher un message de validation
-            print("Vous pouvez prendre le Villo n " + str(villo[0]['VID']) )
+            dateExp = self.db.getUserExpiryDate(self.uid)
+            if dateExp != None and dateExp > datetime.now():
+                self.db.takeVillo(self.uid, stationName, date, villo[0]['VID'])
+                #TODO: Afficher un message de validation
+                print("Vous pouvez prendre le Villo n " + str(villo[0]['VID']) )
+            else:
+                print("Vous n'etes plus abonne")
         else:
             #TODO: Afficher un message d'erreur
             print("Il n'y a plus de villo dans cette station")
