@@ -100,6 +100,8 @@ On sauvegarde aussi la liste des \textit{Trajets} dans une table. Le fait que l'
 
 \section*{Script SQL DDL de création de base de données}
 
+\lstset {numbers=left ,numberstyle=\tiny \bfseries \underline , stepnumber=1,firstnumber=1,numberfirstline=true}
+
 \begin{lstlisting}[language=sql]
 CREATE TABLE `Utilisateur` (
 	`UID` int unsigned NOT NULL,
@@ -170,7 +172,7 @@ $UTS\leftarrow (Utilisateur * Trajet)\bowtie_{StationDépart=SID} Station$
 
 $Sel\leftarrow \sigma_{Station.Nom=Flagey\wedge Utilisateur.Ville=Ixelles}(UTS)$
 
-$res\leftarrow \pi_{Utilisateur.UID}(Sel)$
+$\pi_{Utilisateur.UID}(Sel)$
 \paragraph{}
 \textbf{Calcul relationnel tuple:}
 
@@ -178,6 +180,7 @@ TODO % TODO
 
 \paragraph{}
 \textbf{Imprécisions:}
+
 L'énoncé ne dit pas si il faut récupérer l'UID où le nom de l'utilisateur. Nous avons donc supposé qu'il s'agissait de l'UID.
 
 \subsubsection*{R2}
@@ -204,7 +207,11 @@ Les paires d'utilisateurs ayant fait un trajet identique
 \paragraph{}
 \textbf{Algèbre relationnelle:}
 
-TODO % TODO
+$t2(UID2,dep2,ret2)\leftarrow\pi_{UID,StationDépart,StationRetour}(Trajet)$
+
+$Temp\leftarrow Trajet\bowtie_{StationDépart=dep2\wedge StationRetour=ret2}t2$
+
+$\pi_{UID,UID2}(Temp)$
 
 \paragraph{}
 \textbf{Calcul relationnel tuple:}
@@ -214,7 +221,7 @@ TODO % TODO
 \paragraph{}
 \textbf{Imprécisions:}
 
-TODO%TODO
+Voir \textit{R1}.
 
 \subsubsection*{R4}
 
