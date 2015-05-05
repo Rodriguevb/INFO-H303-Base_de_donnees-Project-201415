@@ -3,6 +3,14 @@
 \usepackage[utf8]{inputenc} 	% accents
 \usepackage[T1]{fontenc}      	% caractères français
 \usepackage{graphicx}		% images
+\usepackage{listings}		% Affichage code source
+
+\lstset{ % Permet d'utiliser des accents dans lstlisting
+     literate=%
+         {á}{{\'a}}1
+         {é}{{\'e}}1
+         {è}{{\`e}}1
+}
 
 \title{Projet INFO-H-303 : Villo!}
 \author{Hereman Nicolas, Van Brande Rodrigue}
@@ -82,12 +90,70 @@
 	\subsection*{Remarque}
 	Un Utilisateur.UID n'existant pas dans Abonné.UID est un utilisateur temporaire
 
-\section*{Justification} % Justification
+\section*{Justification et hypothèses de modélisation} % Justification
 
 On utilise une table \textit{Utilisateur} pour stocker leurs données. On a créé une table \textit{Abonné} afin des les différencier des utilisateurs \textit{Temporaire}. Comme l'héritage des table est totale et exclusive et que toutes les informations dont on a besoin pour ces derniers sont déjà dans la table \textit{Utilisateur}, ils n'ont pas besoin d'une table pour eux. Les utilisateurs temporaires seront ceux qui n'ont pas leurs \textit{UID} dans la table \textit{Abonné}.
 
 Les \textit{Stations} et \textit{Villos} ont aussi droit à leur table pour qu'on y sauvegarde leurs données.
 
 On sauvegarde aussi la liste des \textit{Trajets} dans une table. Le fait que l'\textit{Utilisateur} et la \textit{StationDépart} soit optionnel peut paraître illogique par rapport à la réalité. Mais cela se justifie par le fait que les \textit{Villo} doivent être placé une première fois. Comme on ne sauvegarde pas la \textit{Station} dans laquelle ils sont stockés, on se repère au \textit{Trajet} pour le savoir. On les place donc à l'aide de \textit{Trajet} sans \textit{Station} de départ et sans \textit{Utilisateur}. Les \textit{Trajets} sans \textit{Station} de retour et \textit{DateRetour} sont les \textit{Trajets} encore en cours.
+
+\section*{Script SQL DDL de création de base de données}
+
+\begin{lstlisting}[language=sql]
+CREATE TABLE `Utilisateur` (
+	`UID` int unsigned NOT NULL,
+	`MotDePasse` smallint(4) unsigned zerofill NOT NULL,
+	`CarteDeCredit` bigint(16) unsigned zerofill NOT NULL,
+	`DateExpiration` datetime NOT NULL,
+	PRIMARY KEY (`UID`)
+);
+
+CREATE TABLE `Villo` (
+	`VID` smallint unsigned NOT NULL,
+	`DateMiseEnService` datetime NOT NULL,
+	`Modèle` varchar(12) NOT NULL,
+	`EnEtat` tinyint(1) NOT NULL,
+	PRIMARY KEY (`VID`)
+);
+
+CREATE TABLE `Abonné` (
+	`UID` int unsigned NOT NULL,
+	`RFID` char(20) NOT NULL,
+	`Nom` varchar(50) NOT NULL,
+	`Rue` varchar(100) NOT NULL,
+	`Numéro` smallint unsigned NOT NULL,
+	`CodePostal` smallint(4) unsigned NOT NULL,
+	`Ville` varchar(50) NOT NULL,
+	`Téléphone` char(10) NOT NULL,
+	`DateInscription` datetime NOT NULL,
+	PRIMARY KEY (`RFID`),
+	FOREIGN KEY (`UID`) REFERENCES Utilisateur(`UID`)
+);
+
+CREATE TABLE `Station` (
+	`SID` smallint unsigned NOT NULL,
+	`Nom` varchar(50) NOT NULL,
+	`Longitude` float NOT NULL,
+	`Latitude` float NOT NULL,
+	`Capacité` tinyint unsigned NOT NULL,
+	`BorneDePaiement` tinyint(1) NOT NULL,
+	PRIMARY KEY (`SID`,`Longitude`,`Latitude`)
+);
+
+CREATE TABLE `Trajet` (
+	`VID` smallint unsigned NOT NULL,
+	`DateDépart` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`UID` int unsigned DEFAULT NULL,
+	`StationDépart` smallint unsigned DEFAULT NULL,
+	`DateRetour` datetime DEFAULT NULL,
+	`StationRetour` smallint unsigned DEFAULT NULL,
+	PRIMARY KEY (`VID`,`DateDépart`),
+	FOREIGN KEY (`VID`) REFERENCES Villo(`VID`),
+	FOREIGN KEY (`UID`) REFERENCES Utilisateur(`UID`),
+	FOREIGN KEY (`StationDépart`) REFERENCES Station(`SID`),
+	FOREIGN KEY (`StationRetour`) REFERENCES Station(`SID`)
+);
+\end{lstlisting}
 
 \end{document}
