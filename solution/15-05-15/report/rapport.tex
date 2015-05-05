@@ -175,6 +175,7 @@ $Sel\leftarrow \sigma_{Station.Nom=Flagey\wedge Utilisateur.Ville=Ixelles}(UTS)$
 
 $\pi_{Utilisateur.UID}(Sel)$
 \paragraph{}
+\paragraph{}
 \textbf{Calcul relationnel tuple:}
 
 \begin{multline*}
@@ -192,7 +193,11 @@ Les utilisateurs ayant utilisé Villo au moins 2 fois
 \paragraph{}
 \textbf{Algèbre relationnelle:}
 
-TODO % TODO
+$T(u,v,d) \leftarrow\pi_{UID,VID,DateDepart}(Trajet)$
+
+$Temp\leftarrow Trajet\bowtie_{UID=u}T $
+
+$\pi_{UID}( \sigma_{VID\neq v\vee DateDepart\neq d}(Temp)  )$
 
 \paragraph{}
 \textbf{Calcul relationnel tuple:}
@@ -205,7 +210,7 @@ t2.UID=u.UID \wedge [t1.VID\neq t2.VID\vee t1.DateDepart\neq t2.DateDepart] )  \
 \paragraph{}
 \textbf{Imprécisions:}
 
-TODO%TODO
+Voir \textit{R1}.
 
 \subsubsection*{R3}
 
