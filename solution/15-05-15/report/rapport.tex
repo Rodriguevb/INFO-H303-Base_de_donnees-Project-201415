@@ -197,7 +197,10 @@ TODO % TODO
 \paragraph{}
 \textbf{Calcul relationnel tuple:}
 
-TODO % TODO
+\begin{multline*}
+\{ u.UID|Utilisateur(u)\wedge\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2)\wedge t1.UID=u.UID\wedge \\
+t2.UID=u.UID \wedge [t1.VID\neq t2.VID\vee t1.DateDepart\neq t2.DateDepart] )  \}
+\end{multline*}
 
 \paragraph{}
 \textbf{Imprécisions:}
