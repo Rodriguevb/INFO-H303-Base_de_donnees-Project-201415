@@ -219,7 +219,11 @@ $\pi_{UID,UID2}(Temp)$
 \paragraph{}
 \textbf{Calcul relationnel tuple:}
 
-TODO % TODO
+\begin{multline*}
+\{  u1.UID, u2.UID |Utilisateur(u1)\wedge Utilisateur(u2)\wedge\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2) \wedge \\
+ t1.UID=u1.UID \wedge t2.UID=u2.UID \wedge t1.StationDepart=t2.StationDepart \wedge \\
+ t1.StationRetour=t2.StationRetour )  \}
+\end{multline*}
 
 \paragraph{}
 \textbf{Imprécisions:}
