@@ -156,4 +156,83 @@ CREATE TABLE `Trajet` (
 );
 \end{lstlisting}
 
+\section*{Les requêtes en algèbre relationnel et calcul relationnel tuples} %Requêtes
+
+\subsection*{Requêtes demandées}
+
+\subsubsection*{R1}
+
+Les utilisateurs habitant Ixelles ayant utilisé un Villo de la station Flagey
+\paragraph{}
+\textbf{Algèbre relationnelle:}
+
+$UTS\leftarrow (Utilisateur * Trajet)\bowtie_{StationDépart=SID} Station$
+
+$Sel\leftarrow \sigma_{Station.Nom=Flagey\wedge Utilisateur.Ville=Ixelles}(UTS)$
+
+$res\leftarrow \pi_{Utilisateur.UID}(Sel)$
+\paragraph{}
+\textbf{Calcul relationnel tuple:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Imprécisions:}
+L'énoncé ne dit pas si il faut récupérer l'UID où le nom de l'utilisateur. Nous avons donc supposé qu'il s'agissait de l'UID.
+
+\subsubsection*{R2}
+
+Les utilisateurs ayant utilisé Villo au moins 2 fois
+\paragraph{}
+\textbf{Algèbre relationnelle:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Calcul relationnel tuple:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Imprécisions:}
+
+TODO%TODO
+
+\subsubsection*{R3}
+
+Les paires d'utilisateurs ayant fait un trajet identique
+\paragraph{}
+\textbf{Algèbre relationnelle:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Calcul relationnel tuple:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Imprécisions:}
+
+TODO%TODO
+
+\subsubsection*{R4}
+
+Les vélos ayant deux trajets consécutifs disjoints ( station de retour du premier trajet différente de la station de départ du suivant).
+\paragraph{}
+\textbf{Algèbre relationnelle:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Calcul relationnel tuple:}
+
+TODO % TODO
+
+\paragraph{}
+\textbf{Imprécisions:}
+
+TODO%TODO
+
 \end{document}
+% FIN DU DOCUMENT
