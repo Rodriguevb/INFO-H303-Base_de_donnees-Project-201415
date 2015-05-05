@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}      	% caractères français
 \usepackage{graphicx}		% images
 \usepackage{listings}		% Affichage code source
+\usepackage{amsmath}
 
 \lstset{ % Permet d'utiliser des accents dans lstlisting
      literate=%
@@ -176,7 +177,9 @@ $\pi_{Utilisateur.UID}(Sel)$
 \paragraph{}
 \textbf{Calcul relationnel tuple:}
 
-TODO % TODO
+\begin{multline*}
+\{  u.UID | Utilisateur(u)\wedge u.Ville=Ixelles \wedge \exists t \exists s ( Trajet(t)\wedge Station(s) \\\wedge t.UID=u.UID \wedge s.Nom=Flagey)   \} 
+\end{multline*}
 
 \paragraph{}
 \textbf{Imprécisions:}
