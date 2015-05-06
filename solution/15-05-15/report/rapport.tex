@@ -261,7 +261,11 @@ TODO % TODO
 
 \subsubsection*{Calcul relationnel tuple}
 
-TODO % TODO
+\begin{multline*}
+\{ v.VID |V(v)\wedge\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2)\wedge t1.VID=v.VID\wedge \\
+ t2.VID=v.VID\wedge t1.DateDepart<t2.DateDepart\wedge t1.StationRetour\neq t2.StationDepart\wedge \\
+ \not\exists t3 ( t3.VID=v.VID\wedge t1.DateDepart<t3.DateDepart\wedge t3.DateDepart<t2.DateDepart ) )  \}
+\end{multline*}
 
 \subsubsection*{SQL}
 TODO%TODO
