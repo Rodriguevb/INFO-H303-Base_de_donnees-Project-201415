@@ -509,7 +509,7 @@ class WindowVillo(Frame):
     def __checkPhone(self):
         """ Vérifie l'entrée du téléphone """
         phone = self.phoneEntry.get()
-        return (len(phone) == 10) and (phone.isdigit()) and (phone[0]=="0")
+        return (len(phone) == 10 or len(phone) == 9) and (phone.isdigit()) and (phone[0]=="0")
 
     def __checkCity(self):
         """ Vérifie l'entrée de la ville """

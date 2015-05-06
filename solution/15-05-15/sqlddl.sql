@@ -1,5 +1,5 @@
 CREATE TABLE `Utilisateur` (
-	`UID` int unsigned NOT NULL,
+	`UID` mediumint unsigned NOT NULL,
 	`MotDePasse` smallint(4) unsigned zerofill NOT NULL,
 	`CarteDeCredit` bigint(16) unsigned zerofill NOT NULL,
 	`DateExpiration` datetime NOT NULL,
@@ -15,14 +15,14 @@ CREATE TABLE `Villo` (
 );
 
 CREATE TABLE `Abonné` (
-	`UID` int unsigned NOT NULL,
+	`UID` mediumint unsigned NOT NULL,
 	`RFID` char(20) NOT NULL,
 	`Nom` varchar(50) NOT NULL,
 	`Rue` varchar(100) NOT NULL,
 	`Numéro` smallint unsigned NOT NULL,
 	`CodePostal` smallint(4) unsigned NOT NULL,
 	`Ville` varchar(50) NOT NULL,
-	`Téléphone` char(10) NOT NULL,
+	`Téléphone` varchar(10) NOT NULL,
 	`DateInscription` datetime NOT NULL,
 	PRIMARY KEY (`RFID`),
 	FOREIGN KEY (`UID`) REFERENCES Utilisateur(`UID`)
@@ -41,7 +41,7 @@ CREATE TABLE `Station` (
 CREATE TABLE `Trajet` (
 	`VID` smallint unsigned NOT NULL,
 	`DateDépart` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`UID` int unsigned DEFAULT NULL,
+	`UID` mediumint unsigned DEFAULT NULL,
 	`StationDépart` smallint unsigned DEFAULT NULL,
 	`DateRetour` datetime DEFAULT NULL,
 	`StationRetour` smallint unsigned DEFAULT NULL,
