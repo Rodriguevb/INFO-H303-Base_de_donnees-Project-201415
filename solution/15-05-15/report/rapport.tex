@@ -161,37 +161,35 @@ CREATE TABLE `Trajet` (
 
 \section*{Les requêtes en algèbre relationnel et calcul relationnel tuples} %Requêtes
 
-\subsection*{Requêtes demandées}
-
-\subsubsection*{R1}
+\subsection*{R1}
 
 Les utilisateurs habitant Ixelles ayant utilisé un Villo de la station Flagey
-\paragraph{}
-\textbf{Algèbre relationnelle:}
+
+\subsubsection*{Algèbre relationnelle}
 
 $UTS\leftarrow (Utilisateur * Trajet)\bowtie_{StationDépart=SID} Station$
 
 $Sel\leftarrow \sigma_{Station.Nom=Flagey\wedge Utilisateur.Ville=Ixelles}(UTS)$
 
 $\pi_{Utilisateur.UID}(Sel)$
-\paragraph{}
-\paragraph{}
-\textbf{Calcul relationnel tuple:}
+
+\subsubsection*{Calcul relationnel tuple}
 
 \begin{multline*}
 \{  u.UID | Utilisateur(u)\wedge u.Ville=Ixelles \wedge \exists t \exists s ( Trajet(t)\wedge Station(s) \\\wedge t.UID=u.UID \wedge s.Nom=Flagey)   \} 
 \end{multline*}
 
-\paragraph{}
-\textbf{Imprécisions:}
+\subsubsection*{SQL}
+TODO%TODO
+
+\subsubsection*{Imprécisions}
 
 L'énoncé ne dit pas si il faut récupérer l'UID où le nom de l'utilisateur. Nous avons donc supposé qu'il s'agissait de l'UID.
 
-\subsubsection*{R2}
+\subsection*{R2}
 
 Les utilisateurs ayant utilisé Villo au moins 2 fois
-\paragraph{}
-\textbf{Algèbre relationnelle:}
+\subsubsection*{Algèbre relationnelle}
 
 $T(u,v,d) \leftarrow\pi_{UID,VID,DateDepart}(Trajet)$
 
@@ -199,24 +197,24 @@ $Temp\leftarrow Trajet\bowtie_{UID=u}T $
 
 $\pi_{UID}( \sigma_{VID\neq v\vee DateDepart\neq d}(Temp)  )$
 
-\paragraph{}
-\textbf{Calcul relationnel tuple:}
+\subsubsection*{Calcul relationnel tuple}
 
 \begin{multline*}
 \{ u.UID|Utilisateur(u)\wedge\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2)\wedge t1.UID=u.UID\wedge \\
 t2.UID=u.UID \wedge [t1.VID\neq t2.VID\vee t1.DateDepart\neq t2.DateDepart] )  \}
 \end{multline*}
 
-\paragraph{}
-\textbf{Imprécisions:}
+\subsubsection*{SQL}
+TODO%TODO
+
+\subsubsection*{Imprécisions}
 
 Voir \textit{R1}.
 
-\subsubsection*{R3}
+\subsection*{R3}
 
 Les paires d'utilisateurs ayant fait un trajet identique
-\paragraph{}
-\textbf{Algèbre relationnelle:}
+\subsubsection*{Algèbre relationnelle}
 
 $t2(UID2,dep2,ret2)\leftarrow\pi_{UID,StationDépart,StationRetour}(Trajet)$
 
@@ -224,8 +222,7 @@ $Temp\leftarrow Trajet\bowtie_{StationDépart=dep2\wedge StationRetour=ret2}t2$
 
 $\pi_{UID,UID2}(Temp)$
 
-\paragraph{}
-\textbf{Calcul relationnel tuple:}
+\subsubsection*{Calcul relationnel tuple}
 
 \begin{multline*}
 \{  u1.UID, u2.UID |Utilisateur(u1)\wedge Utilisateur(u2)\wedge\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2) \wedge \\
@@ -233,27 +230,43 @@ $\pi_{UID,UID2}(Temp)$
  t1.StationRetour=t2.StationRetour )  \}
 \end{multline*}
 
-\paragraph{}
-\textbf{Imprécisions:}
+\subsubsection*{SQL}
+TODO%TODO
+
+\subsubsection*{Imprécisions}
 
 Voir \textit{R1}.
 
-\subsubsection*{R4}
+\subsection*{R4}
 
 Les vélos ayant deux trajets consécutifs disjoints ( station de retour du premier trajet différente de la station de départ du suivant).
-\paragraph{}
-\textbf{Algèbre relationnelle:}
+\subsubsection*{Algèbre relationnelle}
 
 TODO % TODO
 
-\paragraph{}
-\textbf{Calcul relationnel tuple:}
+\subsubsection*{Calcul relationnel tuple}
 
 TODO % TODO
 
-\paragraph{}
-\textbf{Imprécisions:}
+\subsubsection*{SQL}
+TODO%TODO
 
+\subsubsection*{Imprécisions}
+
+TODO%TODO
+
+\subsection*{R5}
+
+Les utilisateurs, la date d'inscription, le nombre total de trajet effectués, la distance totale parcourue et la distance moyenne parcourue par trajet, classés en fonction de la distance totale parcourue.
+
+\subsubsection*{SQL}
+TODO%TODO
+
+\subsection*{R6}
+
+Les stations avec le nombre total de vélos déposés dans cette station ( un même vélo peut-être comptabilisé plusieurs fois) et le nombre d'utilisateurs différent ayant utilisé la station et ce pour toutes les stations ayant été utilisées au moins 10 fois.
+
+\subsubsection*{SQL}
 TODO%TODO
 
 \end{document}
