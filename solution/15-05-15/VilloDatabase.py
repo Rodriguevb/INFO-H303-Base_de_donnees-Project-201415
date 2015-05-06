@@ -197,4 +197,13 @@ class VilloDatabase:
 		else:
 			return None
 
+	def getStationCapacity(self, stationName):
+		""" Retourne la capacité d'une station """
+		cursor = self.connection.cursor()
+		sql1 = "SELECT Capacité FROM Station WHERE Nom=\""+stationName+"\" "
+
+		cursor.execute(sql1)
+		station = cursor.fetchone()
+		return station['Capacité']
+
 

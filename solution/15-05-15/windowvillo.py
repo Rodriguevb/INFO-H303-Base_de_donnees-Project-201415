@@ -589,10 +589,14 @@ class WindowVillo(Frame):
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         index = self.listStation.curselection()
         stationName = self.listStation.get(index)
-        # TODO: Vérifier qu'il y a de la place dans la station
-        self.db.putVillo(self.uid, date, stationName)
-        self.__makeManagepage()
-        tkinter.messagebox.showinfo("Validation", "Villo remis en place")
+        capacity = self.db.getStationCapacity(stationName)
+        used = len(self.db.getVilloInStation(stationName))
+        if capacity > used:
+            self.db.putVillo(self.uid, date, stationName)
+            self.__makeManagepage()
+            tkinter.messagebox.showinfo("Validation", "Villo remis en place")
+        else:
+            tkinter.messagebox.showinfo("Erreur", "Il n'y a plus de place dans la station")
 
     def __signalProblem(self):
         """ Signale un problème avec un villo """
