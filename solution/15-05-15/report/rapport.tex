@@ -180,7 +180,11 @@ $\pi_{Utilisateur.UID}(Sel)$
 \end{multline*}
 
 \subsubsection*{SQL}
-TODO%TODO
+\begin{lstlisting}[language=sql]
+SELECT u.UID FROM Trajet t, Utilisateur u, Station s 
+WHERE u.UID=t.UID AND s.SID=t.StationDépart
+AND u.Ville='Ixelles' AND s.Nom='Flagey'
+\end{lstlisting}
 
 \subsubsection*{Imprécisions}
 
@@ -205,7 +209,10 @@ t2.UID=u.UID \wedge [t1.VID\neq t2.VID\vee t1.DateDepart\neq t2.DateDepart] )  \
 \end{multline*}
 
 \subsubsection*{SQL}
-TODO%TODO
+\begin{lstlisting}[language=sql]
+SELECT t1.UID FROM Trajet t1, Trajet t2 WHERE t1.UID=t2.UID
+AND ( t1.DateDépart!=t2.DateDépart OR t1.VID!=t2.VID )
+\end{lstlisting}
 
 \subsubsection*{Imprécisions}
 
@@ -216,22 +223,28 @@ Voir \textit{R1}.
 Les paires d'utilisateurs ayant fait un trajet identique
 \subsubsection*{Algèbre relationnelle}
 
-$t2(UID2,dep2,ret2)\leftarrow\pi_{UID,StationDépart,StationRetour}(Trajet)$
+$t2(UID2,dep2,ret2)\leftarrow\pi_{UID,StationDepart,StationRetour}(Trajet)$
 
-$Temp\leftarrow Trajet\bowtie_{StationDépart=dep2\wedge StationRetour=ret2}t2$
+$Temp\leftarrow Trajet\bowtie_{StationDepart=dep2\wedge StationRetour=ret2}t2$
 
-$\pi_{UID,UID2}(Temp)$
+$\pi_{UID,UID2}(\sigma_{UID\neq UID2} Temp)$
 
 \subsubsection*{Calcul relationnel tuple}
 
 \begin{multline*}
-\{  u1.UID, u2.UID |Utilisateur(u1)\wedge Utilisateur(u2)\wedge\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2) \wedge \\
- t1.UID=u1.UID \wedge t2.UID=u2.UID \wedge t1.StationDepart=t2.StationDepart \wedge \\
- t1.StationRetour=t2.StationRetour )  \}
+\{  u1.UID, u2.UID |Utilisateur(u1)\wedge Utilisateur(u2)\wedge u1.UID \neq u2.UID\wedge \\
+\exists t1\exists t2 ( Trajet(t1)\wedge Trajet(t2) \wedge
+ t1.UID=u1.UID \wedge t2.UID=u2.UID \wedge \\
+  t1.StationDepart=t2.StationDepart \wedge t1.StationRetour=t2.StationRetour )  \}
 \end{multline*}
 
 \subsubsection*{SQL}
-TODO%TODO
+\begin{lstlisting}[language=sql]
+SELECT t1.UID, t2.UID FROM Trajet t1, Trajet t2
+WHERE t1.StationDépart=t2.StationDépart
+AND t1.StationRetour=t2.StationRetour
+AND t1.UID!=t2.UID
+\end{lstlisting}
 
 \subsubsection*{Imprécisions}
 
