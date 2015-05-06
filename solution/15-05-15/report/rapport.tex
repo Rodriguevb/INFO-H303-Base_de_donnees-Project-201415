@@ -279,12 +279,12 @@ Les utilisateurs, la date d'inscription, le nombre total de trajet effectués, l
 \begin{lstlisting}[language=sql]
 SELECT t1.uid, a.DateInscription, t1.nb, di.dist, di.adist 
 FROM 
-(SELECT Trajet.UID, t.nb FROM Trajet
-	INNER JOIN
-	(SELECT tr.UID as uid, COUNT(*) as nb FROM Trajet 
-			as tr GROUP BY tr.UID ) as t
-	ON Trajet.UID = t.uid
-	GROUP BY t.uid ) as t1,
+(SELECT Trajet.UID, t.nb FROM
+	Trajet,
+	(SELECT tr.UID as uid, COUNT(*) as nb 
+		FROM Trajet as tr GROUP BY tr.UID ) as t
+		WHERE Trajet.UID = t.uid
+		GROUP BY t.uid ) as t1,
 Abonné a,
 (SELECT tra.UID as uid, 
 	SUM( SQRT(POW(s2.Longitude-s1.Longitude,2) +
@@ -309,7 +309,16 @@ Pour les distances, il n'est pas précisé d'unité. Nous avons donc pris la dé
 Les stations avec le nombre total de vélos déposés dans cette station ( un même vélo peut-être comptabilisé plusieurs fois) et le nombre d'utilisateurs différent ayant utilisé la station et ce pour toutes les stations ayant été utilisées au moins 10 fois.
 
 \subsubsection*{SQL}
-TODO%TODO
+\begin{lstlisting}[language=sql]
+SELECT v.s, v.nbvillo, u.nbuser
+FROM
+(SELECT tr.StationRetour as s, COUNT(*) as nbvillo 
+	FROM Trajet tr GROUP BY s) as v,
+(SELECT tr.StationRetour as s, COUNT(DISTINCT tr.UID) as nbuser 
+	FROM Trajet tr GROUP BY s) as u
+WHERE v.s = u.s
+HAVING v.nbvillo >= 10
+\end{lstlisting}
 
 \end{document}
 % FIN DU DOCUMENT
