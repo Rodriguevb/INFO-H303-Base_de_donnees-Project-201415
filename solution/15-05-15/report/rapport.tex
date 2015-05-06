@@ -283,11 +283,19 @@ $\pi_{v2}(\sigma_{s1\neq s2\wedge d3=NULL} (Temp) )$
 \end{multline*}
 
 \subsubsection*{SQL}
-TODO%TODO
+\begin{lstlisting}[language=sql]
+SELECT t1.VID FROM Trajet t1, Trajet t2
+WHERE t1.VID = t2.VID
+AND t1.DateDepart < t2.DateDepart
+AND t1.StationRetour != t2.StationDepart
+AND NOT EXISTS
+	(SELECT * FROM Trajet t3
+     WHERE t3.VID = t1.VID
+     AND t1.DateDepart < t3.DateDepart
+     AND t3.DateDepart < t2.DateDepart)
+GROUP BY t1.VID
+\end{lstlisting}
 
-\subsubsection*{Imprécisions}
-
-TODO%TODO
 
 \subsection*{R5}
 
