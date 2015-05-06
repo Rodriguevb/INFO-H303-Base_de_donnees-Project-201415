@@ -124,10 +124,16 @@ class VilloDatabase:
 		""" Donner un villo. Provient de la station à la date pour l'utilisateur passer en paramètre. """
 		cursor = self.connection.cursor()
 
-		sql = "INSERT INTO `Trajet` (`VID`,`DateDépart`,`UID`, `StationDépart`) \
-					VALUES ("+str(vid)+",'"+str(dateStart)+"',"+str(uid)+",\""+stationName+"\")"
+		sql1= "SELECT `SID` FROM Station WHERE `Nom`=\""+stationName+"\" "
 
-		cursor.execute(sql)
+		cursor.execute(sql1)
+
+		station = cursor.fetchone()
+
+		sql2 = "INSERT INTO `Trajet` (`VID`,`DateDépart`,`UID`, `StationDépart`) \
+					VALUES ("+str(vid)+",'"+str(dateStart)+"',"+str(uid)+","+str(station['SID'])+")"
+
+		cursor.execute(sql2)
 		self.connection.commit()
 
 	def getVilloIDFromUser(self, uid):
