@@ -5,6 +5,11 @@
 \usepackage{graphicx}		% images
 \usepackage{listings}		% Affichage code source
 \usepackage{amsmath}
+\usepackage{amssymb}
+
+\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+  \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
 
 \lstset{ % Permet d'utiliser des accents dans lstlisting
      literate=%
@@ -257,7 +262,17 @@ Voir \textit{R1}.
 Les vélos ayant deux trajets consécutifs disjoints ( station de retour du premier trajet différente de la station de départ du suivant).
 \subsubsection*{Algèbre relationnelle}
 
-TODO % TODO
+$T1(v1,d1,s1)\leftarrow\pi_{VID,DateDepart,StationRetour}(Trajet)$
+
+$T2(v2,d2,s2)\leftarrow\pi_{VID,DateDepart,StationDepart}(Trajet)$
+
+$T3(v3,d3)\leftarrow\pi_{VID,DateDepart}(Trajet)$
+
+$T12\leftarrow T1\bowtie_{v1=v2\wedge d1<d2}T2$
+
+$Temp\leftarrow T12\leftouterjoin_{d1<d3\wedge d3<d2\wedge v3=v1}T3$
+
+$\pi_{v2}(\sigma_{s1\neq s2\wedge d3=NULL} (Temp) )$
 
 \subsubsection*{Calcul relationnel tuple}
 
