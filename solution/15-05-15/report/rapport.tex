@@ -167,23 +167,23 @@ Les utilisateurs habitant Ixelles ayant utilisé un Villo de la station Flagey
 
 \subsubsection*{Algèbre relationnelle}
 
-$UTS\leftarrow (Utilisateur * Trajet)\bowtie_{StationDépart=SID} Station$
+$UTS\leftarrow (Abonne * Trajet)\bowtie_{StationDepart=SID} Station$
 
-$Sel\leftarrow \sigma_{Station.Nom=Flagey\wedge Utilisateur.Ville=Ixelles}(UTS)$
+$Sel\leftarrow \sigma_{Nom=Flagey\wedge Ville=Ixelles}(UTS)$
 
-$\pi_{Utilisateur.UID}(Sel)$
+$\pi_{UID}(Sel)$
 
 \subsubsection*{Calcul relationnel tuple}
 
 \begin{multline*}
-\{  u.UID | Utilisateur(u)\wedge u.Ville=Ixelles \wedge \exists t \exists s ( Trajet(t)\wedge Station(s) \\\wedge t.UID=u.UID \wedge s.Nom=Flagey)   \} 
+\{  a.UID | Abonne(a)\wedge a.Ville='Ixelles' \wedge \exists t \exists s ( Trajet(t)\wedge Station(s) \\\wedge t.UID=a.UID \wedge s.Nom='Flagey')   \} 
 \end{multline*}
 
 \subsubsection*{SQL}
 \begin{lstlisting}[language=sql]
-SELECT u.UID FROM Trajet t, Utilisateur u, Station s 
-WHERE u.UID=t.UID AND s.SID=t.StationDépart
-AND u.Ville='Ixelles' AND s.Nom='Flagey'
+SELECT a.UID FROM Trajet t, Abonné a, Station s 
+WHERE a.UID=t.UID AND s.SID=t.StationDépart
+AND a.Ville="Ixelles" AND s.Nom="Flagey"
 \end{lstlisting}
 
 \subsubsection*{Imprécisions}
@@ -211,7 +211,8 @@ t2.UID=u.UID \wedge [t1.VID\neq t2.VID\vee t1.DateDepart\neq t2.DateDepart] )  \
 \subsubsection*{SQL}
 \begin{lstlisting}[language=sql]
 SELECT t1.UID FROM Trajet t1, Trajet t2 WHERE t1.UID=t2.UID
-AND ( t1.DateDépart!=t2.DateDépart OR t1.VID!=t2.VID )
+AND ( t1.DateDépart!=t2.DateDépart OR t1.VID!=t2.VID ) 
+GROUP BY t1.UID
 \end{lstlisting}
 
 \subsubsection*{Imprécisions}
@@ -244,6 +245,7 @@ SELECT t1.UID, t2.UID FROM Trajet t1, Trajet t2
 WHERE t1.StationDépart=t2.StationDépart
 AND t1.StationRetour=t2.StationRetour
 AND t1.UID!=t2.UID
+GROUP BY t1.UID,t2.UID
 \end{lstlisting}
 
 \subsubsection*{Imprécisions}
