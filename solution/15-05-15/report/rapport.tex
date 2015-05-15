@@ -33,11 +33,11 @@
 	\begin{itemize}
 		\item La \textit{DateExpiration} d'un \textit{Abonné} doit être strictement supérieure à sa \textit{DateInscription}
 		
-		\item La \textit{DateDépart} d'un \textit{Trajet} doit être strictement supérieure à la \textit{DateInscription} de l'\textit{Abonné} qui le fait.
+		\item La \textit{DateDépart} d'un \textit{Trajet} doit être strictement supérieure à la \textit{DateInscription} de l'\textit{Abonné} qui l'effectue.
 		
-		\item La \textit{DateDépart} d'un \textit{Trajet} pot être strictement inférieure à la \textit{DateExpiration} de l'\textit{Utilisateur}.
+		\item La \textit{DateDépart} d'un \textit{Trajet} doit être strictement inférieure à la \textit{DateExpiration} de l'\textit{Utilisateur}.
 		
-		\item La \textit{DateDépart} d'un \textit{Trajet} doit être strictement inférieure à la \textit{DateExpiration} de l'\textit{Utilisateur} qui le fait.
+		\item La \textit{DateDépart} d'un \textit{Trajet} doit être strictement inférieure à la \textit{DateExpiration} de l'\textit{Utilisateur} qui l'effectue.
 		
 		\item La \textit{DateRetour} d'un \textit{Trajet} doit être strictement supérieure à la \textit{DateDépart} de ce même \textit{Trajet}.
 		
@@ -333,7 +333,7 @@ Comme pour \textit{R1}, on a décidé d'utiliser l'\textit{UID} plutôt que le \
 Pour les distances, il n'est pas précisé d'unité. Nous avons donc pris la décision d'utiliser directement les coordonnées géographiques ( Longitude et Latitude ) sans aucune conversion pour les calculer.
 \subsection*{R6}
 
-Les stations avec le nombre total de vélos déposés dans cette station ( un même vélo peut-être comptabilisé plusieurs fois) et le nombre d'utilisateurs différent ayant utilisé la station et ce pour toutes les stations ayant été utilisées au moins 10 fois.
+Les stations avec le nombre total de vélos déposés dans cette station ( un même vélo peut-être comptabilisé plusieurs fois) et le nombre d'utilisateurs différents ayant utilisé la station et ce pour toutes les stations ayant été utilisées au moins 10 fois.
 
 \subsubsection*{SQL}
 \begin{lstlisting}[language=sql]
@@ -348,17 +348,17 @@ HAVING v.nbvillo >= 10
 \end{lstlisting}
 
 \section*{Justification et hypothèses}
-Les seules hypothèses faites en plus de celles données pour la modélisation sont par rapport au types des colonnes dans la base de donnée. Voici les explications.
+Les seules hypothèses faites en plus de celles données pour la modélisation sont par rapport au type des colonnes dans la base de donnée. Voici les explications.
 
-Tout d'abord pour la table \textit{Utilisateur}. L'\textit{UID} est stocké dans un mediumint unsigned car il s'agit d'un chiffre positif. Ce type allant jusqu'à 16 277 215, nous avons jugé cela suffisant par rapport au nombre d'utilisateur potentiel. Les \textit{MotDePasse} des fichiers data fournis pour le projet était tous des nombres de 4 chiffres, nous avons décider de les stocker dans des smallint unsigned de taille 4. La \textit{CarteDeCredit} est une suite de 16 chiffres, on a donc pu la stocker dans un bigint unsigned de taille 16. Pour la \textit{DateExpiration}, on a fait comme toutes les dates du projet, nous l'avons enregistré au format datetime.
+Tout d'abord pour la table \textit{Utilisateur}. L'\textit{UID} est stocké dans un mediumint unsigned car il s'agit d'un chiffre positif. Ce type allant jusqu'à 16 277 215, nous avons jugé cela suffisant par rapport au nombre d'utilisateur potentiel. Les \textit{MotDePasse} des fichiers data fournis pour le projet était tous des nombres à 4 chiffres, nous avons décidé de les stocker dans des smallint unsigned de taille 4. La \textit{CarteDeCredit} est une suite de 16 chiffres, on a donc pu la stocker dans un bigint unsigned de taille 16. Pour la \textit{DateExpiration}, on a fait comme toutes les dates du projet, nous l'avons enregistré au format datetime.
 
-Ensuite pour la table \textit{Villo}. Le \textit{VID} est stocké dans un smallint unsigned. Ce type permet de stocker des entier positif allant jusqu'à 65 535. Nous avons jugé ce nombre suffisant. Le modèle est un varchar de taille 12 qui est la taille du texte de tous les modèles des fichiers data. \textit{EnEtat}, qui est un booléen étant vrai lorsque le villo n'est pas cassé, est stocké dans un tinyint qui vaut 0 lorsque le booléen est faux et 1 lorsqu'il est vrai.
+Ensuite pour la table \textit{Villo}. Le \textit{VID} est stocké dans un smallint unsigned. Ce type permet de stocker des entiers positifs allant jusqu'à 65 535. Nous avons jugé ce nombre suffisant. Le modèle est un varchar de taille 12 qui est la taille du texte de tous les modèles des fichiers data. \textit{EnEtat}, qui est un booléen étant vrai lorsque le villo n'est pas cassé, est stocké dans un tinyint qui vaut 0 lorsque le booléen est faux et 1 lorsqu'il est vrai.
 
-La table suivante est la table \textit{Abonné}. Le \textit{Nom}, la \textit{Ville} et la \textit{Rue} sont stockées dans des varchar dont les tailles sont respectivement 50, 50 et 100. Ces tailles ont été choisies arbitrairement par rapport à ce que nous pensions suffisant pour stocker ces données. Le \textit{Numéro} est un smallint unsigned car un tinyint unsigned ne va que jusque 255 et bien que ce nombre paraisse assez grand, le smallint unsigned nous permet une meilleure marge de sécurité. Les \textit{CodePostal} belges sont des nombres de 4 chiffres, ils sont donc stockés dans un smallint unsigned de taille 4. Bien que le téléphone soit une suite de 9 (fixes) ou 10 (gsm) chiffres, nous avons décider de le stocker dans un varchar de taille 10 pour continuer à stocker le 0 à l'avant. Le \textit{RFID} est un nombre de 20 chiffres qui est donc trop grand pour un bigint unsigned. Nous le stockons donc dans un varchar de taille 20. Les RFID ne se suivant pas nécessairement, il n'est pas incrémenté mais généré aléatoirement à l'inscription.
+La table suivante est la table \textit{Abonné}. Le \textit{Nom}, la \textit{Ville} et la \textit{Rue} sont tous stockées dans des varchar dont les tailles sont respectivement 50, 50 et 100. Ces tailles ont été choisi arbitrairement par rapport à ce que nous pensions suffisant pour stocker ces données. Le \textit{Numéro} est un smallint unsigned car un tinyint unsigned ne va que jusque 255 et bien que ce nombre paraisse assez grand, le smallint unsigned nous permet une meilleure marge de sécurité. Les \textit{CodePostal} belges sont des nombres de 4 chiffres, ils sont donc stockés dans un smallint unsigned de taille 4. Bien que le téléphone soit une suite de 9 (fixes) ou 10 (gsm) chiffres, nous avons décider de le stocker dans un varchar de taille 10 pour continuer à stocker le 0 à l'avant. Le \textit{RFID} est un nombre de 20 chiffres qui est donc trop grand pour un bigint unsigned. Nous le stockons donc dans un varchar de taille 20. Les RFID ne se suivant pas nécessairement, il n'est pas incrémenté mais généré aléatoirement à l'inscription.
 
-Ensuite pour la table \textit{Station}. Le \textit{SID} est stocké dans un smallint unsigned qui nous semble amplement suffisant alors qu'un tinyint risquait de limiter l'augmentation du nombre de station. La \textit{Longitude} et la \textit{Latitude} sont des float car la précision des double n'était pas nécéssaire. La \textit{Capacité} est stocké dans un tinyint car 255 nous semble une limite bien assez importante. \textit{BorneDePaiement} étant un booléen, il est stocké dans un tinyint.
+Ensuite pour la table \textit{Station}. Le \textit{SID} est stocké dans un smallint unsigned qui nous semble amplement suffisant alors qu'un tinyint risquait de limiter l'augmentation du nombre de station. La \textit{Longitude} et la \textit{Latitude} sont des floats car la précision des doubles n'était pas nécessaire. La \textit{Capacité} est stocké dans un tinyint car 255 nous semble une limite bien assez importante. \textit{BorneDePaiement} étant un booléen, il est stocké dans un tinyint.
 
-Il n'y a rien de particulier à dire sur la table \textit{Trajet} étant donné que celle ci est uniquement composé de date ainsi que de foreign key.
+Il n'y a rien de particulier à dire sur la table \textit{Trajet} étant donné que celle-ci est uniquement composée de date ainsi que de foreign key.
 
 \end{document}
 % FIN DU DOCUMENT
