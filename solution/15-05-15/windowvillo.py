@@ -8,6 +8,9 @@ import tkinter.messagebox
 import random
 
 class WindowVillo(Frame):
+    """
+        Cette classe gère l'interface utilisateur du problème.
+    """
     def __init__(self,master=None):
         """ Constructeur """
         Frame.__init__(self,master, height=600, width=800)
@@ -16,6 +19,12 @@ class WindowVillo(Frame):
         self.__makeHomepage()
 
         self.db = VilloDatabase()
+
+    ################################################################
+    #                                                              #
+    #                  Méthodes gérant l'affichage                 #
+    #               Fonctionnalitées aux lignes +- 420             #
+    ################################################################
         
     def __packFrame(self):
         """ affiche la frame """
@@ -407,6 +416,13 @@ class WindowVillo(Frame):
         self.historyList.destroy()
         self.scrollbar.destroy()
         self.backButton.destroy()
+
+
+    ################################################################
+    #                                                              #
+    #           Méthodes gérant les fonctionnalités                #
+    ################################################################
+
 
     def __loadVilloConsult(self):
         """ Charge une liste de villo pour la consultation """

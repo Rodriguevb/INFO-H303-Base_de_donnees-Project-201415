@@ -4,6 +4,9 @@
 import pymysql.cursors
 
 class VilloDatabase:
+	"""
+	Classe qui gère l'interaction avec la base de donnée.
+	"""
 
 	def __init__(self):
 		""" Constructeur """
